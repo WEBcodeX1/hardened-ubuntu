@@ -58,7 +58,7 @@ The solution aims to achieve an optimal balance between usability and security.
 - systemd
 - CUPS (printing system)
 
-**Note:** For systemd-free Linux distributions, consider Devuan.
+**Note:** For systemd-free Linux distributions, consider Devuan (https://www.devuan.org/).
 
 ## Prerequisites
 
@@ -66,11 +66,11 @@ The solution aims to achieve an optimal balance between usability and security.
 - USB bootable installer (UNetbootin or Rufus)
 - GPT-only mode enabled in Rufus for UEFI/Secure Boot configurations
 - Optional: EFI partition encryption (Ubuntu 25.10 supports TPM 2.0)
-- Local DHCP configuration with NTP options
+- Local DHCP configuration with NTP option (DHCP option 42)
 
 # Secure DNS Configuration with NextDNS
 
-NextDNS provides comprehensive DNS security with advanced filtering capabilities, including:
+NextDNS represents a modern DNS security solution designed with privacy and security as primary considerations. It provides comprehensive DNS security with advanced filtering capabilities, including:
 
 - Tracking site blocking
 - Advertisement filtering
