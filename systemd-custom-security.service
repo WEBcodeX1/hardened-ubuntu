@@ -1,0 +1,9 @@
+[Unit]
+Description=Custom Security Settings
+
+[Service]
+ExecStart=/usr/local/bin/set-custom-security.sh
+Type=idle
+
+[Install]
+WantedBy=multi-user.target
