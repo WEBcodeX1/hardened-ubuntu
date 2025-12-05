@@ -1,0 +1,17 @@
+listen_addresses = [ '127.0.0.1:5353' ]
+
+server_names = ['NextDNS-[NEXTDNS_ID]']
+block_ipv6 = true
+ipv6_servers = false
+
+[query_log]
+  file = '/var/log/dnscrypt-proxy/query.log'
+
+[nx_log]
+  file = '/var/log/dnscrypt-proxy/nx.log'
+
+[sources]
+
+[static]
+  [static.'NextDNS-[NEXTDNS_ID]']
+  stamp = 'sdns://[NEXTDNS_STAMP]'
