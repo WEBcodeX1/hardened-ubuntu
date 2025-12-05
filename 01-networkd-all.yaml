@@ -1,0 +1,4 @@
+# let networkd manage all devices on this system
+network:
+  version: 2
+  renderer: networkd

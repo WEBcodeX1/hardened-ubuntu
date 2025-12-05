@@ -1,0 +1,9 @@
+network:
+  ethernets:
+    [NET_IF_NAME]:
+      match:
+        macaddress: [NET_IF_MACADDRESS]
+      set-name: [NET_IF_NAME]
+      mtu: [NET_IF_MTU]
+      dhcp4: yes
+  version: 2
