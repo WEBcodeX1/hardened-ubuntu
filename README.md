@@ -1,113 +1,93 @@
 # Abstract
 
-Currently sending DNS traffic unencrypted over the internet is a massive security concern.
-Also Operating Systems and Internet Browsers are getting bloated more and more with unneeded
-(sometimes probably highly insecure) stuff.
+Transmitting DNS traffic unencrypted over the internet represents a significant security vulnerability. Additionally, modern operating systems and internet browsers have become increasingly bloated with unnecessary and potentially insecure components.
 
-Far in the past, i was building (compiling) my linux machines by hand (Hardened Linux From Scratch),
-i even built a small LHFS clone - Monolith Linux. This was rock-solid secure, but **not** really
-adaptable to real world scenarios (enterprise / carrier-grade) requirements considering the
-effort of stable, continoous updates / manpower.
+Historically, building Linux systems from source (such as Hardened Linux From Scratch) provided robust security. However, such approaches prove impractical for real-world enterprise or carrier-grade deployments due to the substantial effort required for stable, continuous updates and maintenance.
 
-Time showed that using a solid Linux Distribution (Ubuntu) has lots-of advantages, but also comes
-with significant disadvantages / security relevant settings and should not be used in production
-environments.
+Experience has demonstrated that while established Linux distributions like Ubuntu offer numerous advantages, they also present significant security concerns and default configurations unsuitable for production environments without proper hardening.
 
-This setup fixes these disadvantages, hardens a current Ubuntu 25.10 workstation system and makes
-it production-ready in minutes.
+This repository addresses these shortcomings by providing a comprehensive hardening solution for Ubuntu 25.10 workstation systems, enabling production-ready deployment within minutes.
 
-## New Ubuntu 25.10 Features
+## Ubuntu 25.10 Key Features
 
-- XServer-less, 100% Wayland Architecture (Gnome 49)
-- Much more manageable / customizable Service Dependencies (systemd)
-- Greatly improved yaml based Auto-Installation
-- Hardware based (TPM 2.0+) Harddrive Encryption (experimental)
+- XServer-less, 100% Wayland architecture (GNOME 49)
+- Enhanced service dependency management and customization (systemd)
+- Significantly improved YAML-based auto-installation
+- Hardware-based hard drive encryption using TPM 2.0+ (experimental)
 
-## Disadvantages
+## Security Concerns in Default Ubuntu 25.10
 
-Unfortunately Ubuntu 25.10 ships with some nasty, per default enabled, full-automated,
-**not really controllable** stuff:
+Ubuntu 25.10 ships with several security-relevant features enabled by default that provide insufficient administrative control:
 
-- Full-automated / Unattended Upgrades
-- Automated (UEFI) Firmware Updates
-- Ubuntu FAN-Networking (VXLAN, udp tunneling)
-- Constantly dialing home (ubuntu-report, ubuntu-insights)
-- SNAPd(ed) Software Packages
-- NetworkManager Controlled Networking (non-netplan)
-- Default mirror URLs are not http (not https)
+- Fully automated unattended upgrades
+- Automated UEFI firmware updates
+- Ubuntu FAN networking (VXLAN, UDP tunneling)
+- Telemetry services (ubuntu-report, ubuntu-insights)
+- SNAP package management system
+- NetworkManager-controlled networking (non-netplan)
+- HTTP-based mirror URLs (non-HTTPS)
 
-Warning: Automated update processes in combination with poisoned DNS could be **very bad**!
+**Warning:** Automated update processes combined with DNS poisoning attacks present severe security risks.
 
 # Hardened Ubuntu 25.10 (Desktop)
 
-Our repository is intended to harden a default Ubuntu 25.10 Desktop installation
-especially suitable for Software Developing / Workstation requirements.
+This repository provides comprehensive hardening configurations for default Ubuntu 25.10 Desktop installations, specifically designed for software development and workstation environments.
 
-It tries to give an optimal balance between usability and security,
+The solution aims to achieve an optimal balance between usability and security.
 
-## Features
+## Security Features
 
-- Encrypt (DOH) all DNS (including shell) traffic completely
-- Harden IOMMU Settings (strict)
-- Netplan enabled Network Management
-- Install Usbguard (USB attacks)
-- Disable Multicast Capabilities (including DNS resolving)
-- Disable Kernel Debugging
-- Disable Core Dumps
-- Blacklist uneeeded Kernel Modules (e.g. Intel ME)
-- Firefox-ESR from native Firefox repository (non-snap)
-- Remove SNAP(d) completely
-- Global Hardened Firefox Settings
-- Remove automated Unattended Upgrades
-- Harden global sysctl
-- Disable Thunderbolt
-- Disable Internet Protocol Version 6 (IPv6)
+- Complete DNS traffic encryption using DNS-over-HTTPS (DoH), including shell traffic
+- Strict IOMMU hardening
+- Netplan-based network management
+- USB attack protection via USBGuard
+- Disabled multicast capabilities (including DNS resolution)
+- Disabled kernel debugging
+- Disabled core dumps
+- Blacklisted unnecessary kernel modules (e.g., Intel ME)
+- Firefox ESR from native repository (non-SNAP)
+- Complete SNAP and snapd removal
+- Global hardened Firefox configuration
+- Disabled automated unattended upgrades
+- Hardened global sysctl parameters
+- Disabled Thunderbolt
+- Disabled Internet Protocol version 6 (IPv6)
 
-## Preserve
+## Preserved Components
 
-- Preserve systemd
-- Preserve CUPS
+- systemd
+- CUPS (printing system)
 
-Note: if you are searching for a systemd-less linux, try Devuan (http://).
+**Note:** For systemd-free Linux distributions, consider Devuan (https://www.devuan.org/).
 
 ## Prerequisites
 
-- Current Ubuntu 25.10 Desktop iso
-- Make USB bootable installer (unetbootin or Rufus)
-- Enable "GPT only" mode in Rufus for a UEFI/Secure Boot setup
-- Optional encrypt your EFI / partitions (Current Ubuntu is able to use TPM 2.0)
-- Local DHCP setup should include NTP option (option )
+- Ubuntu 25.10 Desktop ISO image
+- USB bootable installer (UNetbootin or Rufus)
+- GPT-only mode enabled in Rufus for UEFI/Secure Boot configurations
+- Optional: EFI partition encryption (Ubuntu 25.10 supports TPM 2.0)
+- Local DHCP configuration with NTP option (DHCP option 42)
 
-# Secure DNS / NextDNS
+# Secure DNS Configuration with NextDNS
 
-NextDNS is the first really ... with very good DNS security in mind. Additionally
-it filters out the following:
+NextDNS represents a modern DNS security solution designed with privacy and security as primary considerations. It provides comprehensive DNS security with advanced filtering capabilities, including:
 
-- Tracking Sites
-- Advertisments (really working 100%)
-- 
+- Tracking site blocking
+- Advertisement filtering
+- Community-maintained security templates
 
-With some additional templates (community built)
-
-Also the following ...
-
-- Always prefer DNS over TLS (ANS)
-
+The configuration prioritizes DNS-over-HTTPS (DoH) for all DNS queries.
 
 ## Requirements
 
-- A working NextDNS account
-- Get Secure sdns stamp (see account website)
-- Put stamp inside dnscrypt-proxy.toml template (installer script)
+- Active NextDNS account
+- Secure SDNS stamp (available from NextDNS account dashboard)
+- SDNS stamp configured in dnscrypt-proxy.toml template
 
-dnscrypt-proxy and
+## Infrastructure Configuration
 
-## Infrastructure
+To establish secure DNS infrastructure and prevent DNS-based attacks:
 
-To get a non-attackable (unencrypted DNS traffic) 
-
-- Ensure **all** DNS traffic is routed to NextDNS DoH servers
-- Ensure no unencrypted DNS will be sent to internal / external router(s)
-- Ensure DoH requests go to the correct IP address(es)
-
-## Infrastructure
+- Route all DNS traffic to NextDNS DoH servers
+- Block unencrypted DNS queries to internal and external routers
+- Verify DoH requests are directed to correct IP addresses
