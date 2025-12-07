@@ -1,0 +1,19 @@
+autoinstall:
+  version: 1
+  timezone: "Europe/Berlin"
+  locale: "en_US.UTF-8"
+  keyboard:
+    layout: de
+    variant: ""
+    toggle: null
+  identity:
+    realname: 'User Name'
+    username: userid
+    password: '$y$j9T$u2.Sxog5EGXbH1sqVnrVD.$Qi76Enig/FpDS92jEhxsa6fLSZh4KwOMSEqfr8TH8L.'
+    hostname: ubuntu
+  storage:
+    layout:
+      name: direct
+  kernel-crash-dumps:
+    enabled: false
+  shutdown: poweroff
