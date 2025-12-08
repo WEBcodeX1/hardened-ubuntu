@@ -37,6 +37,19 @@ systemctl mask apt-daily.service
 systemctl mask sys-kernel-debug.mount
 systemctl mask sys-kernel-tracing.mount
 
+# mask user snapd services
+systemctl mask --user snap.prompting-client.daemon.service
+systemctl mask --user snap.snapd-desktop-integration.snapd-desktop-integration.service
+systemctl mask --user snap.firmware-updater.firmware-notifier.service
+systemctl mask --user snapd.session-agent.service
+systemctl mask --user snapd.session-agent.socket
+
+# mask user snapd sockets
+systemctl mask --user snapd.session-agent.socket
+
+# mask user timers
+systemctl mask --user snap.firmware-updater.firmware-notifier.timer
+
 # remove snapd desktop apps / icons
 rm /var/lib/snapd/desktop/applications/*
 

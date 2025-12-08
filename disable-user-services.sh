@@ -1,13 +1,5 @@
 #!/bin/sh
 
-# mask user snapd services
-systemctl mask --user snap.prompting-client.daemon.service
-systemctl mask --user snap.snapd-desktop-integration.snapd-desktop-integration.service
-systemctl mask --user snapd.session-agent.socket
-
-# mask user timers
-systemctl mask --user snap.firmware-updater.firmware-notifier.timer
-
 # make xdg autostart dir
 mkdir ~/.config/autostart
 
