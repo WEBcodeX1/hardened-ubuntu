@@ -53,6 +53,10 @@ systemctl mask --user snapd.session-agent.socket
 # mask user timers
 systemctl mask --user snap.firmware-updater.firmware-notifier.timer
 
+# mask user launchpad related
+systemctl mask --user launchpadlib-cache-clean.service
+systemctl mask --user launchpadlib-cache-clean.timer
+
 # remove snapd desktop apps / icons
 rm /var/lib/snapd/desktop/applications/*
 
