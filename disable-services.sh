@@ -14,6 +14,9 @@ systemctl disable snapd.system-shutdown.service
 systemctl disable snapd.core-fixup.service
 systemctl disable kdump-tools.service
 
+# disable apport service
+systemctl disable apport.service
+
 # disable snapd repair timer
 systemctl disable snapd.snap-repair.timer
 
