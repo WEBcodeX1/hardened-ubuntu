@@ -1,5 +1,33 @@
 # 1. Abstract
 
+## Table of Contents
+
+- [1. Abstract](#1-abstract)
+  - [1.1. Ubuntu 25.10 Key Features](#11-ubuntu-2510-key-features)
+  - [1.2. Security Concerns in Default Ubuntu 25.10](#12-security-concerns-in-default-ubuntu-2510)
+- [2. Hardened Ubuntu 25.10 (Desktop)](#2-hardened-ubuntu-2510-desktop)
+  - [2.1. Security Features](#21-security-features)
+  - [2.2. Preserved Components](#22-preserved-components)
+  - [2.3. Prerequisites](#23-prerequisites)
+- [3. Secure DNS Configuration with NextDNS](#3-secure-dns-configuration-with-nextdns)
+  - [3.1. Requirements](#31-requirements)
+  - [3.2. Infrastructure Configuration](#32-infrastructure-configuration)
+- [4. Installation Instructions](#4-installation-instructions)
+  - [4.1. Overview](#41-overview)
+  - [4.2. Configure System Parameters](#42-configure-system-parameters)
+  - [4.3. Initial System Hardening (No Network Required)](#43-initial-system-hardening-no-network-required)
+  - [4.4. Install Security Components (Network Required)](#44-install-security-components-network-required)
+  - [4.5. Verify DNS-over-HTTPS Configuration](#45-verify-dns-over-https-configuration)
+  - [4.6. Install Packages and User Configuration](#46-install-packages-and-user-configuration)
+  - [4.7. Installation Complete](#47-installation-complete)
+- [5. Automated USB Installation](#5-automated-usb-installation)
+  - [5.1. Autoinstall Configuration](#51-autoinstall-configuration)
+    - [5.1.1. Configuration File Structure](#511-configuration-file-structure)
+    - [5.1.2. Customizing Autoinstall Configuration](#512-customizing-autoinstall-configuration)
+  - [5.2. Creating Bootable USB Installation Medium](#52-creating-bootable-usb-installation-medium)
+  - [5.3. Post-Installation Hardening](#53-post-installation-hardening)
+  - [5.4. Fully Automated Installation with Late Commands](#54-fully-automated-installation-with-late-commands)
+
 Transmitting DNS traffic unencrypted over the internet represents a significant security vulnerability. Additionally, modern operating systems and internet browsers have become increasingly bloated with unnecessary and potentially insecure components.
 
 Historically, building Linux systems from source (such as Hardened Linux From Scratch) provided robust security. However, such approaches prove impractical for real-world enterprise or carrier-grade deployments due to the substantial effort required for stable, continuous updates and maintenance.
