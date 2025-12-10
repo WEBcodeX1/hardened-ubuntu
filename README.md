@@ -62,7 +62,8 @@ The solution aims to achieve an optimal balance between usability and security.
 - systemd
 - CUPS (printing system)
 
-**Note:** For systemd-free Linux distributions, consider Devuan (https://www.devuan.org/).
+> [!TIP]
+> For systemd-free Linux distributions, consider Devuan (https://www.devuan.org/).
 
 ## 2.3. Prerequisites
 
