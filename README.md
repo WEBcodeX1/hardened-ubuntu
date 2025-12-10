@@ -1,5 +1,16 @@
 # 1. Abstract
 
+Transmitting DNS traffic unencrypted over the internet represents a significant security vulnerability. Additionally, modern operating systems and internet browsers have become increasingly bloated with unnecessary and potentially insecure components.
+
+Historically, building Linux systems from source (such as Hardened Linux From Scratch) provided robust security. However, such approaches prove impractical for real-world enterprise or carrier-grade deployments due to the substantial effort required for stable, continuous updates and maintenance.
+
+Experience has demonstrated that while established Linux distributions like Ubuntu offer numerous advantages, they also present significant security concerns and default configurations unsuitable for production environments without proper hardening.
+
+This repository addresses these shortcomings by providing a comprehensive hardening solution for Ubuntu 25.10 workstation systems, enabling production-ready deployment within minutes.
+
+**Additional Resources:**
+- For detailed information about Hardened Ubuntu and NextDNS security configuration, see: [Hardened Ubuntu NextDNS Security Guide](https://www.der-it-pruefer.de/security/Hardened-Ubuntu-NextDNS-Security)
+
 ## Table of Contents
 
 - [1. Abstract](#1-abstract)
@@ -27,17 +38,6 @@
   - [5.2. Creating Bootable USB Installation Medium](#52-creating-bootable-usb-installation-medium)
   - [5.3. Post-Installation Hardening](#53-post-installation-hardening)
   - [5.4. Fully Automated Installation with Late Commands](#54-fully-automated-installation-with-late-commands)
-
-Transmitting DNS traffic unencrypted over the internet represents a significant security vulnerability. Additionally, modern operating systems and internet browsers have become increasingly bloated with unnecessary and potentially insecure components.
-
-Historically, building Linux systems from source (such as Hardened Linux From Scratch) provided robust security. However, such approaches prove impractical for real-world enterprise or carrier-grade deployments due to the substantial effort required for stable, continuous updates and maintenance.
-
-Experience has demonstrated that while established Linux distributions like Ubuntu offer numerous advantages, they also present significant security concerns and default configurations unsuitable for production environments without proper hardening.
-
-This repository addresses these shortcomings by providing a comprehensive hardening solution for Ubuntu 25.10 workstation systems, enabling production-ready deployment within minutes.
-
-**Additional Resources:**
-- For detailed information about Hardened Ubuntu and NextDNS security configuration, see: [Hardened Ubuntu NextDNS Security Guide](https://www.der-it-pruefer.de/security/Hardened-Ubuntu-NextDNS-Security)
 
 ## 1.1. Ubuntu 25.10 Key Features
 
