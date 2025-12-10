@@ -109,7 +109,7 @@ The installation process consists of three main scripts that must be executed in
 4. **DNS verification** - Validate DNS-over-HTTPS functionality
 5. **installer-step3.sh** - Final package installation and user configuration
 
-## 4.2. Step 0: Configure System Parameters
+## 4.2. Step 1: Configure System Parameters
 
 **IMPORTANT:** Before running any installer scripts, you must configure your system-specific parameters in `config.sh`.
 
@@ -149,7 +149,7 @@ ip link show
 ip link show <interface_name>
 ```
 
-## 4.3. Step 1: Initial System Hardening (No Network Required)
+## 4.3. Step 2: Initial System Hardening (No Network Required)
 
 The first installer script performs the initial hardening configuration. This script **must be executed without network access** to prevent potential security issues during configuration.
 
@@ -181,7 +181,7 @@ sudo ./installer-step1.sh
 sudo reboot
 ```
 
-## 4.4. Step 2: Install Security Components (Network Required)
+## 4.4. Step 3: Install Security Components (Network Required)
 
 After rebooting, the second installer script must be executed. This script **requires network access** and will install base security requirements.
 
@@ -201,7 +201,7 @@ cd hardened-ubuntu
 sudo ./installer-step2.sh
 ```
 
-## 4.5. Step 3: Verify DNS-over-HTTPS Configuration
+## 4.5. Step 4: Verify DNS-over-HTTPS Configuration
 
 After installer-step2.sh completes, you **must verify** that DNS encryption is working correctly.
 
@@ -225,7 +225,7 @@ sudo journalctl -u dnscrypt-proxy -n 50
 
 If the service is not running or shows errors, troubleshoot before proceeding to Step 4.
 
-## 4.6. Step 4: Install Packages and User Configuration
+## 4.6. Step 5: Install Packages and User Configuration
 
 The final installer script installs additional packages and applies user-based security settings.
 
