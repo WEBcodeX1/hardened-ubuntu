@@ -327,42 +327,20 @@ mkpasswd -m yescrypt
 2. **Create the autoinstall ISO** by adding your customized autoinstall.yaml:
 
 ```bash
-# extract the iso contents
-mkdir -p /tmp/ubuntu-iso
+# extract Ubuntu ISO
+mkdir -p /tmp/ubuntu-iso /tmp/ubuntu-custom
 sudo mount -o loop ubuntu-25.10-desktop-amd64.iso /tmp/ubuntu-iso
-mkdir -p /tmp/ubuntu-custom
 cp -rT /tmp/ubuntu-iso /tmp/ubuntu-custom
 
 # add autoinstall configuration
 mkdir -p /tmp/ubuntu-custom/autoinstall
 cp autoinstall/autoinstall.yaml /tmp/ubuntu-custom/autoinstall/
 
-# copy hardening scripts to the iso
+# copy hardening scripts to ISO
 mkdir -p /tmp/ubuntu-custom/hardening
+cp *.sh *.conf *.toml *.yaml *.js /tmp/ubuntu-custom/hardening/
 
-# copy installer scripts
-cp installer-step1.sh installer-step2.sh installer-step3.sh /tmp/ubuntu-custom/hardening/
-cp config.sh /tmp/ubuntu-custom/hardening/
-
-# copy configuration scripts
-cp apt-install-cmds.sh apt-preinstall-cmds.sh apt-remove-cmds.sh /tmp/ubuntu-custom/hardening/
-cp disable-dbus-services.sh disable-services.sh disable-user-services.sh /tmp/ubuntu-custom/hardening/
-cp enable-systemd-custom-security.sh install-non-snapd-firefox.sh /tmp/ubuntu-custom/hardening/
-cp modules-blacklist.sh patch-hosts.sh patch-ubuntu-mirrors-https.sh /tmp/ubuntu-custom/hardening/
-cp set-custom-security.sh set-grub-kernel-cmdline.sh set-limits.sh /tmp/ubuntu-custom/hardening/
-cp set-sysctl.sh setup-netplan.sh /tmp/ubuntu-custom/hardening/
-
-# copy configuration files
-cp limits.conf modules-blacklist.conf nsswitch.conf resolved.conf /tmp/ubuntu-custom/hardening/
-cp dnscrypt-proxy.toml firefox-global.js hosts /tmp/ubuntu-custom/hardening/
-cp sysctl-10-domainname.conf sysctl-10-net.conf sysctl-20-misc.conf /tmp/ubuntu-custom/hardening/
-cp sysctl-55-kernel-hardening.conf sysctl-99-coredump.conf /tmp/ubuntu-custom/hardening/
-cp systemd-custom-security.service /tmp/ubuntu-custom/hardening/
-
-# copy netplan templates
-cp 01-networkd-all.yaml 02-net-if-config.yaml /tmp/ubuntu-custom/hardening/
-
-# create the custom iso
+# create custom ISO
 sudo apt-get install xorriso isolinux
 cd /tmp/ubuntu-custom
 sudo xorriso -as mkisofs -r -V "Ubuntu 25.10 Hardened" \
