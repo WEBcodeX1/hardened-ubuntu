@@ -411,4 +411,4 @@ autoinstall:
     # note: installer-step2.sh and installer-step3.sh require manual execution after reboot
 ```
 
-**Important:** Due to the reboot requirement between installation steps and the need for DNS verification, it is recommended to run installer-step2.sh and installer-step3.sh manually after the initial automated installation and reboot. The hardening scripts will be available in `/opt/hardening/` on the installed system.
+**Important:** Due to the reboot requirement between installation steps and the need for DNS verification, it is recommended to run `installer-step2.sh` and `installer-step3.sh` manually after the initial automated installation and reboot. The hardening scripts will be available in `/opt/hardening/` on the installed system.
