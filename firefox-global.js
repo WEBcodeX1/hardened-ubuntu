@@ -25,8 +25,10 @@ pref("media.gmp-gmpopenh264.enabled", false);
 // Default to classic view for about:newtab
 pref("browser.newtabpage.enhanced", false, sticky);
 
-// Disable health report upload
+// Disable telemetry and data collection
 pref("datareporting.healthreport.uploadEnabled", false);
+pref("datareporting.policy.dataSubmissionEnabled", false);
+pref("toolkit.telemetry.enabled", false);
 
 // Default to no suggestions in the urlbar. This still brings a panel asking
 // the user whether they want to opt-in on first use.
@@ -147,3 +149,13 @@ pref("ui.new-webcompat-reporter.enabled", false);
 
 // Signon Settings
 pref("signon.rememberSignons", false);
+
+// Disable WebRTC to prevent IP leak
+pref("media.peerconnection.enabled", false);
+
+// Enhanced privacy settings
+pref("privacy.trackingprotection.enabled", true);
+pref("privacy.trackingprotection.socialtracking.enabled", true);
+
+// Disable geolocation
+pref("geo.enabled", false);
