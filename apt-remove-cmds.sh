@@ -10,6 +10,7 @@ apt-get remove -qy unattended-upgrades
 apt-get remove -qy speech-dispatcher
 apt-get remove -qy ufw
 apt-get remove -qy whoopsie
+apt-get remove -qy update-notifier
 
 # cleanup
 apt-get autoremove -y
