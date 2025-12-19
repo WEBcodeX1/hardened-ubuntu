@@ -3,6 +3,9 @@
 # export config to current env
 . ./config.sh
 
+# set debconf selections "globally"
+debconf-set-selections < debconf-selections.txt
+
 # install packages
 . ./apt-install-cmds.sh
 
