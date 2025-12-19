@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # make xdg autostart dir
-mkdir ~/.config/autostart
+mkdir -p ~/.config/autostart
 
 # copy .desktop files
 cp /etc/xdg/autostart/geoclue-demo-agent.desktop ~/.config/autostart/
