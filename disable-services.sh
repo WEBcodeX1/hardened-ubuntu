@@ -35,6 +35,9 @@ done
 # mask services
 systemctl mask bolt.service
 systemctl mask apt-daily.service
+systemctl mask fwupd.service
+systemctl mask fwupd-refresh.timer
+systemctl mask ubuntu-advantage-desktop-daemon.service
 
 # mask mounts
 systemctl mask sys-kernel-debug.mount
