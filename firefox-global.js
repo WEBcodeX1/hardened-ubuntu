@@ -159,5 +159,8 @@ pref("privacy.trackingprotection.socialtracking.enabled", true);
 // Disable geolocation
 pref("geo.enabled", false);
 
+// Disable Network Proxy
+pref("network.proxy.type", 0);
+
 // Disable Captive Portal Detection
 user_pref("network.captive-portal-service.enabled", false);
