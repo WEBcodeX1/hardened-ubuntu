@@ -1,7 +1,12 @@
 #!/bin/sh
 
+# package upgrade
 apt-get update -y
 apt-get upgrade -y
+
+# get env vars
+nextdns_id=`printenv NEXTDNS_ID`
+nextdns_stamp=`printenv NEXTDNS_STAMP`
 
 # install usbguard
 apt-get install -qy usbguard
@@ -24,3 +29,10 @@ cp ./dnscrypt-proxy.toml /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 # disable / mask dnscrypt resolvconf service
 systemctl disable dnscrypt-proxy-resolvconf.service
 systemctl mask dnscrypt-proxy-resolvconf.service
+
+# replace env vars
+sed -i "s/\[NEXTDNS_ID\]/${nextdns_id}/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+sed -i "s/\[NEXTDNS_STAMP\]/${nextdns_stamp}/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+
+# restart dnscrypt-proxy
+systemctl restart dnscrypt-proxy
