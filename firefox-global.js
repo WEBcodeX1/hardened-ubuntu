@@ -162,15 +162,5 @@ pref("geo.enabled", false);
 // Disable Network Proxy
 pref("network.proxy.type", 0);
 
-// Disable Device Access Privileges
-pref("permissions.default.camera", 2);
-pref("permissions.default.desktop-notification", 2);
-pref("permissions.default.geo", 2);
-pref("permissions.default.microphone", 2);
-pref("permissions.default.xr", 2);
-
 // Disable Autoplay
 pref("media.autoplay.default", 5);
-
-// Disable Captive Portal Detection
-user_pref("network.captive-portal-service.enabled", false);
