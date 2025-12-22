@@ -431,12 +431,17 @@ autoinstall:
   version: 1
   # ... other configuration ...
   late-commands:
-    # copy hardening scripts from iso to target system
-    - curtin in-target -- mkdir -p /opt/hardening
-    - curtin in-target -- cp -r /cdrom/hardening/* /opt/hardening/
-    # run first installer step
-    - curtin in-target -- bash -c "cd /opt/hardening && ./installer-step1.sh"
-    # note: installer-step2.sh and installer-step3.sh require manual execution after reboot
+    # copy hardening scripts to /target
+    - mkdir -p /target/opt/hardening
+    - cp -r /cdrom/hardening/* /target/opt/hardening/
+  user-data:
+    users:
+    # ... users configuration ...
+    runcmd:
+      # remove gnome initial setup
+      - apt-get remove -qy gnome-initial-setup
+      # start installer step 1
+      - cd /opt/hardening && ./installer-step1.sh
 ```
 
 > [!NOTE]
