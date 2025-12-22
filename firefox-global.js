@@ -135,7 +135,6 @@ pref("devtools.source-map.client-service.enabled", false);
 pref("dom.battery.enabled", false);
 
 // Network Settings
-pref("network.captive-portal-service.enabled", false);
 pref("network.automatic-ntlm-auth.allow-proxies", false);
 pref("network.auth.sspi_detect_hash", false);
 pref("network.connectivity-service.enabled", false);
@@ -159,3 +158,9 @@ pref("privacy.trackingprotection.socialtracking.enabled", true);
 
 // Disable geolocation
 pref("geo.enabled", false);
+
+// Disable Network Proxy
+pref("network.proxy.type", 0);
+
+// Disable Autoplay
+pref("media.autoplay.default", 5);
