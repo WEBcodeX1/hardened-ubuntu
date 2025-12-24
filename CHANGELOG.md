@@ -153,5 +153,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Kernel debugging features
 - Unnecessary kernel modules
 - Update notifier package
-
-[Unreleased]: https://github.com/WEBcodeX1/hardened-ubuntu/compare/main...HEAD
