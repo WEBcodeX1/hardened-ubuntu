@@ -6,4 +6,9 @@ network:
       set-name: [NET_IF_NAME]
       mtu: [NET_IF_MTU]
       dhcp4: yes
-  version: 2
+      dhcp6: no
+      dhcp4-overrides:
+        use-dns: no
+      nameservers:
+        addresses: [127.0.0.1]
+        version: 2
