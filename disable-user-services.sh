@@ -35,3 +35,19 @@ desktop_file="$HOME/.config/autostart/disable-gnome-extension-snapd.desktop"
 cp user-autostart.tpl ${desktop_file}
 sed -i "s/\[GNOME_EXTENSION_CMD\]/gnome-extensions disable snapd-prompting@canonical.com/g" ${desktop_file}
 sed -i "s/\[GNOME_EXTENSION_ID\]/snapd prompting/g" ${desktop_file}
+
+# mask systemd user based snap services
+systemctl mask --user -a snap.firmware-updater.firmware-notifier.service
+systemctl mask --user -a snap.firmware-updater.firmware-notifier.timer
+systemctl mask --user -a snap.prompting-client.daemon.service
+systemctl mask --user -a snap.snapd-desktop-integration.snapd-desktop-integration.service
+systemctl mask --user -a snapd.session-agent.service
+systemctl mask --user -a snapd.session-agent.socket
+
+# mask systemd user based gnome settings daemon services
+systemctl mask --user -a org.gnome.SettingsDaemon.MediaKeys.service
+systemctl mask --user -a org.gnome.SettingsDaemon.MediaKeys.target
+systemctl mask --user -a org.gnome.SettingsDaemon.Wwan.service
+systemctl mask --user -a org.gnome.SettingsDaemon.Wwan.target
+systemctl mask --user -a org.gnome.SettingsDaemon.Sharing.service
+systemctl mask --user -a org.gnome.SettingsDaemon.Sharing.target
