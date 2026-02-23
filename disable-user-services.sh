@@ -51,3 +51,6 @@ systemctl mask --user org.gnome.SettingsDaemon.Wwan.service
 systemctl mask --user org.gnome.SettingsDaemon.Wwan.target
 systemctl mask --user org.gnome.SettingsDaemon.Sharing.service
 systemctl mask --user org.gnome.SettingsDaemon.Sharing.target
+
+# disable gnome donation-reminder
+gsettings set org.gnome.settings-daemon.plugins.housekeeping donation-reminder-enabled 'false'
