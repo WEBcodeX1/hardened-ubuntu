@@ -10,5 +10,5 @@ network:
       nameservers:
         addresses: [127.0.0.1]
       access-points:
-        "[NET_WIFI_AP_SSID]":
-          password: "[NET_WIFI_AP_PASS]"
+        "[NET_WIFI_AUTH_SSID]":
+          password: "[NET_WIFI_AUTH_PASS]"
