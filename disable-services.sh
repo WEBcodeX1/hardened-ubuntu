@@ -43,6 +43,9 @@ systemctl mask ubuntu-advantage-desktop-daemon.service
 systemctl mask sys-kernel-debug.mount
 systemctl mask sys-kernel-tracing.mount
 
+# mask sleep, suspend and hibernation
+systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+
 # mask user snapd services
 systemctl mask --user snap.prompting-client.daemon.service
 systemctl mask --user snap.snapd-desktop-integration.snapd-desktop-integration.service
