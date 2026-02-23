@@ -152,6 +152,10 @@ pref("signon.rememberSignons", false);
 // Disable WebRTC to prevent IP leak
 pref("media.peerconnection.enabled", false);
 
+// Disable WASM (web assembly)
+pref("javascript.options.wasm", false);
+pref("devtools.debugger.features.wasm", false);
+
 // Enhanced privacy settings
 pref("privacy.trackingprotection.enabled", true);
 pref("privacy.trackingprotection.socialtracking.enabled", true);
