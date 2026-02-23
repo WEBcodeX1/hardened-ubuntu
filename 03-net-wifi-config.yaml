@@ -1,4 +1,6 @@
 network:
+  version: 2
+  renderer: NetworkManager
   wifis:
     [NET_WIFI_IF_NAME]:
       dhcp4: yes
@@ -10,4 +12,3 @@ network:
       access-points:
         "[NET_WIFI_AP_SSID]":
           password: "[NET_WIFI_AP_PASS]"
-  version: 2

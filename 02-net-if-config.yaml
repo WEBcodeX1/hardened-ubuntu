@@ -1,4 +1,5 @@
 network:
+  version: 2
   ethernets:
     [NET_IF_NAME]:
       match:
@@ -11,4 +12,3 @@ network:
         use-dns: no
       nameservers:
         addresses: [127.0.0.1]
-        version: 2
