@@ -1,0 +1,13 @@
+network:
+  wifis:
+    [NET_WIFI_IF_NAME]:
+      dhcp4: yes
+      dhcp6: no
+      dhcp4-overrides:
+        use-dns: no
+      nameservers:
+        addresses: [127.0.0.1]
+      access-points:
+        "[NET_WIFI_AP_SSID]":
+          password: "[NET_WIFI_AP_PASS]"
+  version: 2
