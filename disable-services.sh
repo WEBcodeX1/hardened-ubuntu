@@ -76,7 +76,8 @@ for user_id in ${sys_users}; do
 
     # make user config dir(s) if not exist
     mkdir -p /home/${user_id}/.config/autostart
-    chown -R ${user_id}:${user_id} /home/${user_id}/.config
+    chown ${user_id}:${user_id} /home/${user_id}/.config
+    chown ${user_id}:${user_id} /home/${user_id}/.config/autostart
 
     # disable gnome initial welcome screen
     touch /home/${user_id}/.config/gnome-initial-setup-done
@@ -92,4 +93,7 @@ for user_id in ${sys_users}; do
 
     # prepare user autostart
     su -c "~/autoinstall-scripts/prepare-user-autostart.sh" - ${user_id}
+
+    # run disable user services (without active user session)
+    su -c "./disable-user-services.sh" - ${user_id}
 done
