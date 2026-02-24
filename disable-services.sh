@@ -44,7 +44,8 @@ systemctl mask sys-kernel-debug.mount
 systemctl mask sys-kernel-tracing.mount
 
 # mask sleep, suspend and hibernation
-systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target
+systemctl mask systemd-suspend-then-hibernate.service
+systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
 
 # mask user snapd services
 systemctl mask --user snap.prompting-client.daemon.service
