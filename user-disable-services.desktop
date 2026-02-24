@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=~/autoinstall-scripts/disable-user-services.sh
+Exec=sh -c "$HOME/autoinstall-scripts/disable-user-services.sh"
 Hidden=false
 Terminal=false
 Name=Disable User Services
