@@ -74,9 +74,9 @@ for user_id in ${sys_users}; do
     mkdir -p /home/${user_id}/autoinstall-scripts
     chown ${user_id}:${user_id} /home/${user_id}/autoinstall-scripts
 
-    # make user config dir if not exists already
-    mkdir -p /home/${user_id}/.config
-    chown ${user_id}:${user_id} /home/${user_id}/.config
+    # make user config dir(s) if not exist
+    mkdir -p /home/${user_id}/.config/autostart
+    chown -R ${user_id}:${user_id} /home/${user_id}/.config
 
     # disable gnome initial welcome screen
     touch /home/${user_id}/.config/gnome-initial-setup-done
