@@ -1,8 +1,8 @@
 network:
   version: 2
-  renderer: NetworkManager
   wifis:
     [NET_WIFI_IF_NAME]:
+      renderer: NetworkManager
       dhcp4: yes
       dhcp6: no
       dhcp4-overrides:
