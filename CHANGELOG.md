@@ -5,6 +5,48 @@ All notable changes to the Hardened Ubuntu project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.2
+
+### Added
+
+#### WiFi Support
+- WiFi interface configuration variables (`NET_WIFI_IF_NAME`, `NET_WIFI_AUTH_SSID`, `NET_WIFI_AUTH_PASS`) in `config.sh`
+- Conditional WiFi netplan setup in `setup-netplan.sh` based on `NET_WIFI_IF_NAME`
+- Special character escaping for WiFi passphrase in `setup-netplan.sh`
+- `wifi-networkmanager-dns.conf`: NetworkManager DNS configuration forcing all DNS queries through dnscrypt-proxy
+- `renderer: NetworkManager` set at WiFi interface level in `03-net-wifi-config.yaml`
+
+#### User Service Management
+- `prepare-user-autostart.sh`: New script handling XDG autostart configuration (split from `disable-user-services.sh`)
+  - Disables autostart for geoclue, im-launch, orca, GNOME Evolution alarm, SNAP, spice-vdagent, ubuntu-advantage, ubuntu-report, update-notifier
+  - Disables GNOME extensions: ding and snapd-prompting
+- `user-disable-services.desktop`: New GNOME autostart desktop entry to run `disable-user-services.sh` on user login
+- `X-GNOME-Autostart-enabled=true` flag added to `user-autostart.tpl`
+- GNOME initial setup welcome screen disabled per user during installation
+- Automatic creation of `~/.config/autostart` directory per user during installation
+- Disabled GNOME donation reminder via gsettings
+
+#### Network Hardening
+- DHCPv6 explicitly disabled (`dhcp6: no`) in ethernet netplan template
+- `dhcp4-overrides: use-dns: no` added to ethernet netplan template to prevent DHCP DNS override
+- Nameserver forced to `127.0.0.1` (dnscrypt-proxy) in ethernet netplan template
+- YAML `version: 2` field moved to correct position in netplan templates
+
+#### Application Security
+- Disabled WebAssembly (WASM) in Firefox (`javascript.options.wasm`, `devtools.debugger.features.wasm`)
+
+### Changed
+
+#### Service Management
+- `disable-user-services.sh` refactored: XDG autostart logic moved to new `prepare-user-autostart.sh`; now focused on masking systemd user-level services
+- Sleep, suspend, and hibernation masked at both system level (`disable-services.sh`) and user level (`disable-user-services.sh`)
+- Systemd user-level snap and GNOME settings daemon services masked in `disable-user-services.sh`
+- `disable-services.sh` now runs `prepare-user-autostart.sh` and `disable-user-services.sh` separately per user
+
+#### Configuration
+- `config.sh` supports multiple space-separated user IDs in `USER_IDS`
+- Improved variable quoting throughout `config.sh`
+
 ## v0.1
 
 ### Added
