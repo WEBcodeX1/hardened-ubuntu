@@ -29,7 +29,7 @@ sed -i "s/\[NET_IF_MACADDRESS\]/${netplan_if_mac}/g" ${netplan_dir}/${net_config
 sed -i "s/\[NET_IF_MTU\]/${netplan_if_mtu}/g" ${netplan_dir}/${net_config_eth}
 
 # copy wifi interface template
-if [ ! -z "${netplan_wifi_if_name}" ]; then
+if [ -n "${netplan_wifi_if_name}" ]; then
     net_config_wifi="03-net-wifi-config.yaml"
     cp ./${net_config_wifi} ${netplan_dir}/
 
