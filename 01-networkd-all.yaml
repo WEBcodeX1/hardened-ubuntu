@@ -1,4 +1,4 @@
-# set global networkmanager to networkd
+# set global network management to networkd
 network:
   version: 2
   renderer: networkd
