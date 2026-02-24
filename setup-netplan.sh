@@ -45,6 +45,8 @@ if [ -n "${netplan_wifi_if_name}" ]; then
 
     # copy global networkmanager dns config
     cp ./wifi-networkmanager-dns.conf /etc/NetworkManager/conf.d/90-dns.conf
+    chown root:root /etc/NetworkManager/conf.d/90-dns.conf
+    chmod 600 /etc/NetworkManager/conf.d/90-dns.conf
 fi
 
 # set permissions
