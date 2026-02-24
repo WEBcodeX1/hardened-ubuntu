@@ -8,7 +8,3 @@ network:
       mtu: [NET_IF_MTU]
       dhcp4: yes
       dhcp6: no
-      dhcp4-overrides:
-        use-dns: no
-      nameservers:
-        addresses: [127.0.0.1]
