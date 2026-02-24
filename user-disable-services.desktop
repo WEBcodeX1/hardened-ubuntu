@@ -5,3 +5,4 @@ Hidden=false
 Terminal=false
 Name=Disable User Services
 Comment=Disable User Services
+X-GNOME-Autostart-enabled=true
