@@ -68,11 +68,20 @@ rm /var/lib/snapd/desktop/applications/*
 
 # process user based disable scripts
 for user_id in ${sys_users}; do
+
+    # process autoinstall scripts
     mkdir -p /home/${user_id}/autoinstall-scripts
     chown ${user_id}:${user_id} /home/${user_id}/autoinstall-scripts
+
+    # make user config dir if not exists already
     mkdir -p /home/${user_id}/.config
     chown ${user_id}:${user_id} /home/${user_id}/.config
+
+    # disable gnome initial welcome screen
     touch /home/${user_id}/.config/gnome-initial-setup-done
+    chown ${user_id}:${user_id} /home/${user_id}/.config/gnome-initial-setup-done
+
+    # copy user based scripts / templates
     cp -Ra ./disable-user-services.sh ./user-autostart.tpl /home/${user_id}/autoinstall-scripts/
     chown ${user_id}:${user_id} /home/${user_id}/autoinstall-scripts/*
     su -c "~/autoinstall-scripts/disable-user-services.sh" - ${user_id}
