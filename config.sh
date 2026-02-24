@@ -17,5 +17,5 @@ export NEXTDNS_STAMP="Base64Hash"
 # kernel
 export KERNEL_DOMAIN_NAME="domain.name"
 
-# sysusers
+# sysusers (must exist in autoinstall.yaml)
 export USER_IDS="admin user1"
