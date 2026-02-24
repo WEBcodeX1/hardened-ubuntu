@@ -33,6 +33,11 @@ if [ -n "${netplan_wifi_if_name}" ]; then
     net_config_wifi="03-net-wifi-config.yaml"
     cp ./${net_config_wifi} ${netplan_dir}/
 
+    # escape special chars in wifi passphrase
+    netplan_wifi_auth_pass=$(echo ${netplan_wifi_auth_pass} | sed 's/\\/\\\\\\\\\\\\\\\\\\/g')
+    netplan_wifi_auth_pass=$(echo ${netplan_wifi_auth_pass} | sed 's/\//\\\//g')
+    netplan_wifi_auth_pass=$(echo ${netplan_wifi_auth_pass} | sed 's/\&/\\\&/g')
+
     # replace env vars
     sed -i "s/\[NET_WIFI_IF_NAME\]/${netplan_wifi_if_name}/g" ${netplan_dir}/${net_config_wifi}
     sed -i "s/\[NET_WIFI_AUTH_SSID\]/${netplan_wifi_auth_ssid}/g" ${netplan_dir}/${net_config_wifi}
@@ -42,7 +47,7 @@ if [ -n "${netplan_wifi_if_name}" ]; then
     cp ./wifi-networkmanager-dns.conf /etc/NetworkManager/conf.d/90-dns.conf
 fi
 
-# correct permissions
+# set permissions
 chown root:root ${netplan_dir}/*
 chmod 600 ${netplan_dir}/*
 
