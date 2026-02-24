@@ -16,5 +16,9 @@ systemctl mask --user org.gnome.SettingsDaemon.Wwan.target
 systemctl mask --user org.gnome.SettingsDaemon.Sharing.service
 systemctl mask --user org.gnome.SettingsDaemon.Sharing.target
 
+# mask sleep, suspend and hibernation
+systemctl mask --user systemd-suspend-then-hibernate.service
+systemctl mask --user sleep.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
 # disable gnome donation-reminder
 gsettings set org.gnome.settings-daemon.plugins.housekeeping donation-reminder-enabled 'false'
