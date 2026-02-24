@@ -7,8 +7,8 @@ export NET_IF_MTU="9000"
 
 # netplan wifi
 export NET_WIFI_IF_NAME="wlp0s20f3"
-export NET_WIFI_AP_SSID="Wifi-SSID"
-export NET_WIFI_AP_PASS="Wifi-Password"
+export NET_WIFI_AUTH_SSID="Wifi-SSID"
+export NET_WIFI_AUTH_PASS="Wifi-Password"
 
 # nextdns
 export NEXTDNS_ID="a1b2c3"
