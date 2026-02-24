@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Exec=~/autoinstall-scripts/disable-user-services.sh
+Hidden=false
+Terminal=false
+Name=Disable User Services
+Comment=Disable User Services

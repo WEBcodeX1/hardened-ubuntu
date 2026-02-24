@@ -83,7 +83,13 @@ for user_id in ${sys_users}; do
     chown ${user_id}:${user_id} /home/${user_id}/.config/gnome-initial-setup-done
 
     # copy user based scripts / templates
-    cp -Ra ./disable-user-services.sh ./user-autostart.tpl /home/${user_id}/autoinstall-scripts/
+    cp -Ra ./prepare-user-autostart.sh ./disable-user-services.sh ./user-autostart.tpl /home/${user_id}/autoinstall-scripts/
     chown ${user_id}:${user_id} /home/${user_id}/autoinstall-scripts/*
-    su -c "~/autoinstall-scripts/disable-user-services.sh" - ${user_id}
+
+    # copy user disable services desktop file
+    cp -Ra ./user-disable-services.desktop /home/${user_id}/.config/autostart/
+    chown ${user_id}:${user_id} /home/${user_id}/.config/autostart/user-disable-services.desktop
+
+    # prepare user autostart
+    su -c "~/autoinstall-scripts/prepare-user-autostart.sh" - ${user_id}
 done
