@@ -25,7 +25,7 @@ cp ./${net_config_eth} ${netplan_dir}/
 
 # replace env vars
 sed -i "s/\[NET_IF_NAME\]/${netplan_if_name}/g" ${netplan_dir}/${net_config_eth}
-sed -i "s/\[NET_WIFI_AUTH_SSID\]/${netplan_if_mac}/g" ${netplan_dir}/${net_config_eth}
+sed -i "s/\[NET_IF_MACADDRESS\]/${netplan_if_mac}/g" ${netplan_dir}/${net_config_eth}
 sed -i "s/\[NET_IF_MTU\]/${netplan_if_mtu}/g" ${netplan_dir}/${net_config_eth}
 
 # copy wifi interface template
@@ -35,7 +35,7 @@ if [ ! -z "${netplan_wifi_if_name}" ]; then
 
     # replace env vars
     sed -i "s/\[NET_WIFI_IF_NAME\]/${netplan_wifi_if_name}/g" ${netplan_dir}/${net_config_wifi}
-    sed -i "s/\[NET_IF_MACADDRESS\]/${netplan_wifi_auth_ssid}/g" ${netplan_dir}/${net_config_wifi}
+    sed -i "s/\[NET_WIFI_AUTH_SSID\]/${netplan_wifi_auth_ssid}/g" ${netplan_dir}/${net_config_wifi}
     sed -i "s/\[NET_WIFI_AUTH_PASS\]/${netplan_wifi_auth_pass}/g" ${netplan_dir}/${net_config_wifi}
 
     # copy global networkmanager dns config
