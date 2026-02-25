@@ -17,4 +17,3 @@ rm /var/lib/snapd/desktop/applications/*
 
 # set custom security (service)
 . ./enable-systemd-custom-security.sh
-
