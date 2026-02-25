@@ -47,6 +47,12 @@ if [ -n "${netplan_wifi_if_name}" ]; then
     cp ./wifi-networkmanager-dns.conf /etc/NetworkManager/conf.d/90-dns.conf
     chown root:root /etc/NetworkManager/conf.d/90-dns.conf
     chmod 600 /etc/NetworkManager/conf.d/90-dns.conf
+
+    # copy global networkmanager p2p device config (disable)
+    cp ./wifi-networkmanager-p2p.conf /etc/NetworkManager/conf.d/91-wifi-p2p.conf
+    sed -i "s/\[NET_WIFI_IF_NAME\]/${netplan_wifi_if_name}/g" /etc/NetworkManager/conf.d/91-wifi-p2p.conf
+    chown root:root /etc/NetworkManager/conf.d/91-wifi-p2p.conf
+    chmod 600 /etc/NetworkManager/conf.d/91-wifi-p2p.conf
 fi
 
 # set permissions
