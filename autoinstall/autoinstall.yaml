@@ -31,6 +31,4 @@ autoinstall:
     - mkdir -p /target/opt/hardening
     - cp -r /cdrom/hardening/* /target/opt/hardening/
     - apt-get remove -qy gnome-initial-setup
-    - mkdir -p /target/home/sysadmin/.config
-    - touch /target/home/sysadmin/.config/gnome-initial-setup-done
   shutdown: poweroff
