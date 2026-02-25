@@ -21,4 +21,8 @@ systemctl mask --user systemd-suspend-then-hibernate.service
 systemctl mask --user sleep.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
 
 # disable gnome donation-reminder
-gsettings set org.gnome.settings-daemon.plugins.housekeeping donation-reminder-enabled 'false'
+gsettings set org.gnome.settings-daemon.plugins.housekeeping donation-reminder-enabled false
+
+# enable usb-guard dbus integration / protection
+gsettings set org.gnome.desktop.privacy usb-protection true
+gsettings set org.gnome.desktop.privacy usb-protection-level 'always'
