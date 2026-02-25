@@ -10,6 +10,9 @@ export NET_WIFI_IF_NAME="wlp0s20f3"
 export NET_WIFI_AUTH_SSID="Wifi-SSID"
 export NET_WIFI_AUTH_PASS="Wifi-Password"
 
+# chronyd
+export NET_NTP_STATIC_SERVER="192.168.1.1"
+
 # nextdns
 export NEXTDNS_ID="a1b2c3"
 export NEXTDNS_STAMP="Base64Hash"
