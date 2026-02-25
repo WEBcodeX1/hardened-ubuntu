@@ -17,6 +17,8 @@ systemctl mask --user org.gnome.SettingsDaemon.Sharing.service
 systemctl mask --user org.gnome.SettingsDaemon.Sharing.target
 
 # mask sleep, suspend and hibernation
+systemctl mask --user systemd-hibernate-clear.service
+systemctl mask --user systemd-hibernate-resume.service
 systemctl mask --user systemd-suspend-then-hibernate.service
 systemctl mask --user sleep.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
 
