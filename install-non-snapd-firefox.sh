@@ -20,3 +20,4 @@ sudo apt-get update -y && sudo apt-get remove -qy firefox && sudo apt-get remove
 sudo apt-get install -qy firefox-esr
 
 sudo cp ./firefox-global.js /usr/lib/firefox-esr/defaults/pref/
+sudo chmod 644 /usr/lib/firefox-esr/defaults/pref/firefox-global.js
