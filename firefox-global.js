@@ -16,10 +16,10 @@ pref("extensions.update.enabled", false, locked);
 // Use LANG environment variable to choose locale
 pref("intl.locale.requested", "");
 
-// Disable default browser checking.
+// Disable default browser checking
 pref("browser.shell.checkDefaultBrowser", false);
 
-// Disable openh264.
+// Disable openh264
 pref("media.gmp-gmpopenh264.enabled", false, locked);
 
 // Default to classic view for about:newtab
