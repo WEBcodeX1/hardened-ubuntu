@@ -168,51 +168,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-#### DNS Protection
 - Protected against DNS-based attacks through encrypted DNS
-
-#### USB Protection
-- Mitigated USB-based attacks through USBGuard
-
-#### Kernel Hardening
+- Mitigated USB-based attacks through `USBGuard`
 - Hardened kernel parameters against common exploits
-
-#### Attack Surface Reduction
 - Disabled unnecessary attack surfaces (Bluetooth, IPv6, multicast)
 - Prevented information disclosure through core dumps and debugging
-
-#### Privacy
-- Secured Firefox browser with privacy-focused defaults
+- Secured `Firefox` browser with privacy-focused defaults
 - Eliminated telemetry and tracking services
 
 ### Changed
 
-#### Network Management
-- Replaced NetworkManager with netplan for network management
-
-#### Application Management
-- Converted Firefox from SNAP to native ESR package
-
-#### Package Sources
+- Replaced `NetworkManager` with `netplan` for network management
+- Converted `Firefox` from SNAP to native ESR package
 - Enforced HTTPS for all Ubuntu package repositories
 
 ### Removed
 
-#### Package Management
-- SNAP package management system and snapd
-
-#### Services
-- Telemetry services (ubuntu-report, ubuntu-insights)
+- `SNAP` package management system and `snapd`
+- Telemetry services (`ubuntu-report`, `ubuntu-insights`)
 - Automated unattended upgrades
 - Automated UEFI firmware updates
-- Avahi/mDNS services
+- `avahi`/mDNS services
 - Bluetooth support
-- NetworkManager
-
-#### Features
-- IPv6 support
+- `NetworkManager`
+- `IPv6` support
 - Multicast DNS resolution
 - Core dump generation
 - Kernel debugging features
 - Unnecessary kernel modules
-- Update notifier package
+- `update-notifier` package
