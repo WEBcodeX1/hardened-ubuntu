@@ -167,10 +167,10 @@ export NET_WIFI_IF_NAME="wlp0s20f3"          # WiFi interface name
 export NET_WIFI_AUTH_SSID="Wifi-SSID"        # WiFi SSID
 export NET_WIFI_AUTH_PASS="Wifi-Password"    # WiFi passphrase
 
-# chronyd NTP server
+# chronyd NTP server (optional)
 export NET_NTP_STATIC_SERVER="192.168.1.1"   # static NTP server IP
 
-# grub kernel command line options
+# grub kernel command line options (optional)
 export GRUB_KERNEL_CMDLINE="i915.enable_dc=0 i915.modeset=1 i915.enable_psr=0 intel_idle.max_cstate=1"
 
 # NextDNS configuration
