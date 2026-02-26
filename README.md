@@ -139,6 +139,10 @@ The installation process consists of three main scripts that must be executed in
 4. **DNS verification** - Validate DNS-over-HTTPS functionality
 5. **installer-step3.sh** - Final package installation and user configuration
 
+> [!WARNING]
+> **A system reboot is required after each installer step** (including after step 1).
+> Do not proceed to the next step without rebooting first.
+
 ## 4.2. Configure System Parameters
 
 **IMPORTANT:** Before running any installer scripts, you must configure your system-specific parameters in `config.sh`.
@@ -154,19 +158,30 @@ Configure the following parameters:
 
 ```bash
 # network interface configuration
-export NET_IF_NAME=enp2s0                  # NIC name
-export NET_IF_MACADDRESS=12:34:56:78:9a:9b # interface MAC
-export NET_IF_MTU=9000                     # MTU size
+export NET_IF_NAME="enp2s0"                  # NIC name
+export NET_IF_MACADDRESS="12:34:56:78:9a:9b" # interface MAC
+export NET_IF_MTU="9000"                     # MTU size
+
+# netplan wifi (leave empty to skip WiFi configuration)
+export NET_WIFI_IF_NAME="wlp0s20f3"          # WiFi interface name
+export NET_WIFI_AUTH_SSID="Wifi-SSID"        # WiFi SSID
+export NET_WIFI_AUTH_PASS="Wifi-Password"    # WiFi passphrase
+
+# chronyd NTP server (optional)
+export NET_NTP_STATIC_SERVER="192.168.1.1"   # static NTP server IP
+
+# grub kernel command line options (optional)
+export GRUB_KERNEL_CMDLINE="i915.enable_dc=0 i915.modeset=1 i915.enable_psr=0 intel_idle.max_cstate=1"
 
 # NextDNS configuration
-export NEXTDNS_ID="abcdef"                 # NextDNS configuration ID
-export NEXTDNS_STAMP=""                    # SDNS stamp
+export NEXTDNS_ID="a1b2c3"                   # NextDNS configuration ID
+export NEXTDNS_STAMP="Base64Hash"            # SDNS stamp
 
 # kernel configuration
-export KERNEL_DOMAIN_NAME="domain.name"    # kernel domain name
+export KERNEL_DOMAIN_NAME="domain.name"      # kernel domain name
 
-# system users
-export USER_IDS="user1 user2"              # space-separated user IDs to process
+# system users (must exist in autoinstall.yaml, space-separated)
+export USER_IDS="admin user1"
 ```
 
 **To find your network interface name:**
@@ -211,6 +226,15 @@ sudo ./installer-step1.sh
 sudo reboot
 ```
 
+> [!WARNING]
+> **After the step 1 reboot, wait approximately 2 minutes before logging in.**
+> The system requires time to complete asynchronous initialization tasks.
+>
+> - **Log in as the sysadmin user first** before any other user account.
+> - **Each configured user (`USER_IDS`) must log in at least once** before proceeding to the
+>   next installer step, so that per-user service settings and autostart configurations are
+>   applied correctly on first login.
+
 ## 4.4. Install Security Components (Network Required)
 
 After rebooting, the second installer script must be executed. This script **requires network access** and will install base security requirements.
@@ -231,7 +255,8 @@ cd hardened-ubuntu
 sudo ./installer-step2.sh
 ```
 
-## 4.5. Verify DNS-over-HTTPS Configuration
+> [!WARNING]
+> **A system reboot is required after completing step 2** before proceeding to step 3.
 
 After installer-step2.sh completes, you **must verify** that DNS encryption is working correctly.
 
@@ -277,7 +302,9 @@ cd hardened-ubuntu
 sudo ./installer-step3.sh
 ```
 
-## 4.7. Installation Complete
+> [!WARNING]
+> **A system reboot is required after completing step 3** to apply all user-level service and
+> autostart configuration changes.
 
 After completing all steps, your Ubuntu 25.10 system is hardened and ready for use. The system includes:
 
