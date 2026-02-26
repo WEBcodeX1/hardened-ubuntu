@@ -228,14 +228,12 @@ sudo reboot
 
 > [!WARNING]
 > **After the step 1 reboot, wait approximately 2 minutes before logging in.**
-> The system requires time to complete initialization of hardened services after the first boot
-> with the new kernel and GRUB parameters.
+> The system requires time to complete asynchronous initialization tasks.
 >
 > - **Log in as the sysadmin user first** before any other user account.
 > - **Each configured user (`USER_IDS`) must log in at least once** before proceeding to the
 >   next installer step, so that per-user service settings and autostart configurations are
 >   applied correctly on first login.
-> - Only after all required users have logged in should you reboot and continue with step 2.
 
 ## 4.4. Install Security Components (Network Required)
 
