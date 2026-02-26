@@ -21,7 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Disables autostart for geoclue, im-launch, orca, GNOME Evolution alarm, SNAP, spice-vdagent, ubuntu-advantage, ubuntu-report, update-notifier
   - Disables GNOME extensions: ding and snapd-prompting
 - `user-disable-services.desktop`: New GNOME autostart desktop entry to run `disable-user-services.sh` on user login
-- `X-GNOME-Autostart-enabled=true` flag added to `user-autostart.tpl`
 - GNOME initial setup welcome screen disabled per user during installation
 - Automatic creation of `~/.config/autostart` directory per user during installation
 - Disabled GNOME donation reminder via gsettings
