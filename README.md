@@ -184,12 +184,6 @@ export KERNEL_DOMAIN_NAME="domain.name"      # kernel domain name
 export USER_IDS="admin user1"
 ```
 
-> [!WARNING]
-> **Do not commit real credentials.** The `config.sh` file is tracked in version control.
-> Do NOT put real WiFi credentials, NextDNS stamps, or other sensitive values here directly.
-> Either override these values via environment variables before running the installer, or
-> keep a local copy of `config.sh` that is excluded from version control.
-
 **To find your network interface name:**
 ```bash
 ip link show
