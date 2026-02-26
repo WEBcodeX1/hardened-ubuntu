@@ -89,13 +89,19 @@ for user_id in ${sys_users}; do
     cp -Ra ./prepare-user-autostart.sh ./disable-user-services.sh ./user-autostart.tpl /home/${user_id}/autoinstall-scripts/
     chown ${user_id}:${user_id} /home/${user_id}/autoinstall-scripts/*
 
-    # copy user disable services desktop file
+    # process (copy, set user_id) user disable services desktop file
     cp -Ra ./user-disable-services.desktop /home/${user_id}/.config/autostart/
     chown ${user_id}:${user_id} /home/${user_id}/.config/autostart/user-disable-services.desktop
+    chmod 644 /home/${user_id}/.config/autostart/user-disable-services.desktop
+    sed -i "s/\[USER_ID\]/${user_id}/g" /home/${user_id}/.config/autostart/user-disable-services.desktop
 
     # prepare user autostart
     su -c "~/autoinstall-scripts/prepare-user-autostart.sh" - ${user_id}
 
     # run disable user services (without active user session)
     su -c "./disable-user-services.sh" - ${user_id}
+
+    # run disable user services (again as root)
+    ./disable-user-services.sh
+
 done
