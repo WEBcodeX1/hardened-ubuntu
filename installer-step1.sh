@@ -30,3 +30,6 @@
 
 # set grub kernel command line
 . ./set-grub-kernel-cmdline.sh
+
+# reload systemd config
+systemctl daemon-reload
