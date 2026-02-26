@@ -168,32 +168,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- Protected against DNS-based attacks through encrypted DNS
-- Mitigated USB-based attacks through `USBGuard`
-- Hardened kernel parameters against common exploits
-- Disabled unnecessary attack surfaces (Bluetooth, IPv6, multicast)
-- Prevented information disclosure through core dumps and debugging
-- Secured `Firefox` browser with privacy-focused defaults
-- Eliminated telemetry and tracking services
+- All DNS traffic encrypted using DNS-over-HTTPS via `dnscrypt-proxy`, protecting against DNS spoofing and interception
+- `USBGuard` deployed to enforce USB device access policies, mitigating USB-based hardware attacks
+- Kernel parameters hardened via `sysctl` configuration: `ptrace` scope restricted, `kexec` disabled, address space randomization enforced
+- Bluetooth, IPv6 stack, and multicast capabilities disabled system-wide, eliminating related attack vectors
+- Core dump generation and kernel debugging interfaces disabled, preventing sensitive memory content disclosure
+- Firefox browser hardened globally via `policies.json` with privacy-focused configuration defaults
+- Telemetry and tracking services eliminated from the system, preventing user data collection
 
 ### Changed
 
-- Replaced `NetworkManager` with `netplan` for network management
-- Converted `Firefox` from SNAP to native ESR package
-- Enforced HTTPS for all Ubuntu package repositories
+- `NetworkManager` replaced with `netplan`-based static network configuration bound to MAC address
+- Firefox transitioned from SNAP-based installation to native `firefox-esr` from the Mozilla APT repository
+- All Ubuntu APT repository URLs enforced to use HTTPS, preventing package integrity attacks
 
 ### Removed
 
-- `SNAP` package management system and `snapd`
-- Telemetry services (`ubuntu-report`, `ubuntu-insights`)
-- Automated unattended upgrades
-- Automated UEFI firmware updates
-- `avahi`/mDNS services
-- Bluetooth support
-- `NetworkManager`
-- `IPv6` support
-- Multicast DNS resolution
-- Core dump generation
-- Kernel debugging features
-- Unnecessary kernel modules
-- `update-notifier` package
+- `SNAP` package management system and `snapd` daemon removed from the system
+- Telemetry services `ubuntu-report` and `ubuntu-insights` removed to prevent user data collection
+- Automated unattended upgrades disabled to prevent unexpected system modifications
+- Automated UEFI firmware updates disabled to prevent uncontrolled firmware changes
+- `avahi` daemon and mDNS services removed, disabling local network service discovery
+- Bluetooth support packages removed to eliminate wireless peripheral attack surface
+- `NetworkManager` removed in favor of `netplan`-managed static network configuration
+- IPv6 protocol support disabled across all network interfaces to reduce attack surface
+- Multicast DNS resolution disabled to prevent local network information exposure
+- Core dump generation disabled to prevent sensitive process memory disclosure
+- Kernel debugging features disabled to prevent kernel space information leakage
+- Unnecessary kernel modules (Intel ME, Thunderbolt, etc.) blacklisted to prevent unauthorized device access
+- `update-notifier` package removed to eliminate automated update notification prompts
