@@ -1,8 +1,7 @@
 [Desktop Entry]
 Type=Application
-Exec=sh -c "$HOME/autoinstall-scripts/disable-user-services.sh"
+Exec=/home/[USER_ID]/autoinstall-scripts/disable-user-services.sh
 Hidden=false
 Terminal=false
 Name=Disable User Services
 Comment=Disable User Services
-X-GNOME-Autostart-enabled=true
