@@ -51,120 +51,74 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 #### Core Security Features
-- Complete DNS traffic encryption using DNS-over-HTTPS (DoH) via `dnscrypt-proxy`
-- `NextDNS` integration with configurable SDNS stamps
-- Strict IOMMU hardening configuration
-- `USBGuard` for USB attack protection
-- Disabled multicast capabilities including DNS resolution
-- Disabled kernel debugging features
-- Disabled core dumps system-wide
-- Blacklisted unnecessary kernel modules (Intel ME, Thunderbolt, etc.)
-- `IPv6` protocol disabled across the system
+- All DNS traffic routed through `dnscrypt-proxy` using DNS-over-HTTPS (DoH), encrypting DNS queries end-to-end to prevent interception and spoofing
+- `NextDNS` integrated with configurable SDNS stamps, providing encrypted DNS filtering with customizable security policies
+- Strict IOMMU hardening configured to prevent DMA-based attacks from malicious or compromised hardware devices
+- `USBGuard` deployed to enforce USB device access control policies, blocking unauthorized USB devices from accessing the system
+- Multicast capabilities disabled system-wide including mDNS resolution, eliminating local network service discovery attack surface
+- Kernel debugging features disabled to prevent information disclosure through kernel debug interfaces
+- Core dumps disabled system-wide to prevent sensitive process memory content from being written to disk
+- Unnecessary kernel modules blacklisted (Intel ME, Thunderbolt, etc.) to prevent unauthorized hardware access and reduce attack surface
+- `IPv6` protocol disabled across the entire system, reducing the network attack surface to IPv4 only
 
 #### Network Configuration
-- `netplan`-based network management replacing `NetworkManager`
-- Static network interface configuration with MAC address binding
-- Configurable MTU settings
-- `systemd-resolved` integration with `dnscrypt-proxy`
-- HTTPS-enforced Ubuntu mirror URLs
-- Static `NextDNS` host entries for bootstrap DNS resolution
+- `netplan`-based network management deployed as a replacement for `NetworkManager`, providing declarative static network configuration
+- Network interfaces bound to MAC addresses with static IP configuration, ensuring consistent interface assignment and preventing unauthorized reconfiguration
+- Configurable MTU settings applied per network interface, allowing optimization for specific network environments
+- `systemd-resolved` integrated with `dnscrypt-proxy` to route all DNS queries through encrypted DNS-over-HTTPS, ensuring no plaintext DNS leakage
+- All Ubuntu APT mirror URLs enforced to use HTTPS, preventing package download interception and tampering attacks
+- Static `NextDNS` host entries configured to enable bootstrap DNS resolution before `dnscrypt-proxy` becomes fully operational
 
 #### System Hardening
-- Comprehensive `sysctl` parameter hardening:
-  - Kernel domain name configuration
-  - Network security parameters
-  - Kernel hardening options
-  - Core dump prevention
-- Global system limits configuration
-- `GRUB` kernel command line hardening
-- Custom `systemd` security service for multicast and kernel module restrictions
+- Comprehensive `sysctl` parameter hardening applied covering kernel domain name configuration, network security parameters, kernel hardening options, and core dump prevention
+- Global system limits configured via `/etc/security/limits.conf` to restrict per-user resource usage and prevent local denial-of-service attacks
+- `GRUB` kernel command line hardened with security-focused boot parameters including IOMMU enforcement and kernel lockdown options
+- Custom `systemd` security service deployed to enforce multicast restrictions and kernel module blacklisting at runtime after each system boot
 
 #### Package Management
-- Complete `SNAP` and `snapd` removal
-- `firefox-esr` installation from Mozilla repository (non-SNAP)
-- Automated removal of telemetry services (`ubuntu-report`, `ubuntu-insights`)
-- Removal of unnecessary packages (`avahi`, `bluez`, `NetworkManager`, etc.)
-- Disabled automated unattended upgrades
-- Disabled automated UEFI firmware updates
+- `SNAP` package management system and `snapd` daemon completely removed from the system, eliminating the sandboxed application runtime and its associated network communication
+- `firefox-esr` installed directly from the Mozilla APT repository as a non-SNAP native package, replacing the default SNAP-based Firefox installation
+- Telemetry services `ubuntu-report` and `ubuntu-insights` automatically removed during installation to prevent user data collection and transmission
+- Unnecessary packages removed including `avahi`, `bluez`, and `NetworkManager` to reduce the system attack surface and eliminate unused network-facing services
+- Automated unattended upgrades disabled to prevent unexpected system modifications during operation that could interfere with the hardened configuration
+- Automated UEFI firmware updates disabled to prevent uncontrolled firmware changes that could undermine system integrity
 
 #### Service Management
-- Comprehensive `systemd` service disabling:
-  - Ubuntu FAN networking (VXLAN, UDP tunneling)
-  - Telemetry and reporting services
-  - Bluetooth services
-  - `avahi`/mDNS services
-  - `apport` crash reporting
-- `dbus` service hardening
-- User-level service management with XDG autostart configuration
+- Comprehensive `systemd` service disabling implemented covering Ubuntu FAN networking (VXLAN, UDP tunneling), telemetry and reporting services, Bluetooth services, `avahi`/mDNS services, and `apport` crash reporting
+- `dbus` service configuration hardened to restrict inter-process communication capabilities and reduce the exposed system bus attack surface
+- User-level service management configured via XDG autostart to disable unnecessary services automatically on each user session start
 
 #### Application Security
-- Global hardened `Firefox` configuration
-- Disabled device access permissions in `Firefox`
-- Disabled media autoplay
-- Disabled network proxy settings
-- Disabled captive portal detection
+- Global hardened `Firefox` configuration deployed via `policies.json`, applying privacy and security settings system-wide for all users without requiring per-user configuration
+- Device access permissions disabled in `Firefox` including camera, microphone, and geolocation access, protecting user privacy against unauthorized sensor access
+- Media autoplay disabled in `Firefox` to prevent automatic execution of potentially malicious or unwanted media content on page load
+- Network proxy settings disabled in `Firefox` to enforce direct connections, preventing proxy-based traffic interception
+- Captive portal detection disabled in `Firefox` to prevent automatic connections to untrusted network endpoints on captive network join
 
 #### Installation Scripts
-- `installer-step1.sh`: Initial system hardening (no network required)
-  - Mirror URL patching to HTTPS
-  - Static `NextDNS` configuration
-  - `netplan` setup
-  - Package removal
-  - Service disabling
-  - Kernel module blacklisting
-  - System limits and `sysctl` configuration
-  - `GRUB` configuration
-- `installer-step2.sh`: Security components installation (network required)
-  - System package updates
-  - `USBGuard` installation
-  - `dnscrypt-proxy` installation
-  - `libnss-resolve` for CLI DNS resolution
-  - DNS-over-HTTPS configuration
-- `installer-step3.sh`: Package installation and user configuration
-  - Essential packages (`aptitude`, `intel-microcode`, `vim`, `kate`, `xterm`, `foot`)
-  - Development tools (`docker.io`, `build-essential`, `debhelper`, `pbuilder`, `devscripts`)
-  - Applications (GIMP, OpenSC, VLC)
-  - `firefox-esr` setup
-  - `SNAP` removal
-  - Custom `systemd` security enablement
+- `installer-step1.sh`: Initial system hardening script designed to run without network access, performing APT mirror URL patching to HTTPS, static `NextDNS` host configuration, `netplan` network setup, unnecessary package removal, `systemd` service disabling, kernel module blacklisting, system resource limits and `sysctl` parameter configuration, and `GRUB` kernel command line hardening
+- `installer-step2.sh`: Security components installation script requiring network access, performing system package updates, `USBGuard` installation and configuration, `dnscrypt-proxy` installation and DNS-over-HTTPS setup, and `libnss-resolve` installation for CLI DNS resolution through the encrypted resolver
+- `installer-step3.sh`: Package installation and user configuration script installing essential packages (`aptitude`, `intel-microcode`, `vim`, `kate`, `xterm`, `foot`), development tools (`docker.io`, `build-essential`, `debhelper`, `pbuilder`, `devscripts`), applications (GIMP, OpenSC, VLC), configuring `firefox-esr` with hardened policies, completing `SNAP` removal, and enabling custom `systemd` security services
 
 #### Automated Installation
-- Ubuntu autoinstall configuration template
-- Automated USB installation support
-- Custom ISO generation scripts with `xorriso`
-- Late-command automation support
-- Post-installation hardening workflows
+- Ubuntu autoinstall configuration template provided to automate the initial Ubuntu installation process without manual intervention
+- Automated USB installation support implemented to enable fully unattended system deployment from bootable USB media
+- Custom ISO generation scripts created using `xorriso` to build bootable installation media with the autoinstall configuration embedded
+- Late-command automation support added to execute hardening scripts automatically at the end of the Ubuntu installation process
+- Post-installation hardening workflows configured to apply all security settings automatically after the base system installation completes
 
 #### Configuration Management
-- Centralized configuration file (`config.sh`)
-- Network interface parameters
-- `NextDNS` configuration
-- Kernel domain name settings
-- User ID management
-- Template-based configuration processing:
-  - `dnscrypt-proxy` configuration templates
-  - `netplan` YAML templates
-  - `sysctl` configuration templates
-  - XDG autostart templates
+- Centralized configuration file (`config.sh`) introduced to consolidate all installation parameters in a single location, simplifying per-site customization
+- Network interface parameters managed centrally in `config.sh` including MAC address binding, static IP address, gateway, and MTU settings
+- `NextDNS` configuration managed via `config.sh` including SDNS stamp URLs and static resolver host entries required for bootstrap DNS
+- Kernel domain name settings configurable via `config.sh` to adapt the installation to specific organizational network environments
+- User ID management configured in `config.sh` supporting multiple space-separated user IDs for consistent multi-user installation
+- Template-based configuration processing implemented for `dnscrypt-proxy` configuration, `netplan` YAML network templates, `sysctl` parameter configuration, and XDG autostart desktop entry templates
 
 #### Documentation
-- Comprehensive `README.md` with:
-  - Abstract and security rationale
-  - Ubuntu 25.10 key features overview
-  - Security concerns in default Ubuntu
-  - Hardened Ubuntu security features
-  - Preserved components documentation
-  - Prerequisites and requirements
-  - `NextDNS` configuration guide
-  - Step-by-step installation instructions
-  - DNS verification procedures
-  - Automated USB installation guide
-  - Table of Contents for easy navigation
-  - Code examples with proper syntax highlighting
-  - Markdown alerts (warnings, tips, notes)
-  - Proper academic style and grammar
-- autoinstall `README` with `netplan` examples
-- Debconf selections for automated package configuration
+- Comprehensive `README.md` created covering the project abstract and security rationale, Ubuntu 25.10 key features overview, security concerns present in default Ubuntu, Hardened Ubuntu security features, preserved components documentation, prerequisites and system requirements, `NextDNS` configuration guide, step-by-step installation instructions, DNS verification procedures, automated USB installation guide, Table of Contents for easy navigation, code examples with proper syntax highlighting, Markdown alerts (warnings, tips, notes), and proper academic style and grammar throughout
+- Autoinstall `README` created with `netplan` configuration examples to guide network setup during automated installation
+- Debconf selections documented for automated package configuration, enabling fully unattended installation without interactive prompts
 
 ### Security
 
