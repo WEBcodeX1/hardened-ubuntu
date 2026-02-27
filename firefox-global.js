@@ -172,5 +172,8 @@ pref("network.proxy.type", 0, locked);
 // Disable Autoplay
 pref("media.autoplay.default", 5, locked);
 
+// Disable Media Navigator
+pref("media.navigator.enabled", false, locked);
+
 // Disable setting remote preferences
 pref("remote.prefs.recommended", false, locked);
