@@ -25,6 +25,13 @@ The kernel network interface name of the primary ethernet adapter.
 
 Used by `setup-netplan.sh` to configure the netplan ethernet interface template (`02-net-if-config.yaml`).
 
+> [!NOTE]
+> The ethernet interface is managed globally by `networkd`. Both `NET_IF_MACADDRESS` and `NET_IF_MTU` are **mandatory** parameters.
+>
+> The `installer-step1` step **must** be run without any active network connectivity. If a network connection is present, `unattended-upgrades` will be triggered automatically, causing the installation to fail.
+>
+> Installation can only be performed via **ethernet**. WiFi is **not** supported during the installation process.
+
 **Example:**
 
 ```sh
@@ -66,6 +73,11 @@ NET_IF_MTU="9000"
 The kernel network interface name of the WiFi adapter.
 
 When set, `setup-netplan.sh` deploys the WiFi netplan template (`03-net-wifi-config.yaml`), the NetworkManager DNS configuration, and the NetworkManager P2P disable configuration, and enables the `ccm`/`cmac` kernel modules required for WPA2 authentication. When left empty, all WiFi configuration steps are skipped.
+
+> [!NOTE]
+> This parameter is **optional**. If omitted, no WiFi configuration will be performed.
+>
+> WiFi interface management is handled by **NetworkManager**, not `networkd`.
 
 **Example:**
 
@@ -109,6 +121,9 @@ The IP address of the static NTP server used by `chrony`.
 
 Used when deploying `chrony.conf` to replace the `[NET_NTP_STATIC_SERVER]` placeholder. This should typically be a local network NTP server such as a router or dedicated time server.
 
+> [!NOTE]
+> This parameter is **optional**. If omitted, an adjusted `chrony` configuration without a static server entry can be used instead.
+
 **Example:**
 
 ```sh
@@ -122,6 +137,11 @@ NET_NTP_STATIC_SERVER="192.168.1.1"
 Additional kernel command-line parameters appended to the GRUB `GRUB_CMDLINE_LINUX_DEFAULT` setting.
 
 Used by `set-grub-kernel-cmdline.sh`. The value is appended after the default `quiet splash ipv6.disable=1` parameters. Typical use cases include IOMMU configuration, power management tuning, or graphics driver options.
+
+> [!NOTE]
+> This parameter **must** be set and should contain system-specific settings.
+>
+> The default value is optimized for an Intel CPU (Gen 9) with an integrated Intel i915 GPU. It disables DMAR (DMA remapping) and limits the Intel C-state to guarantee consistent performance.
 
 **Example:**
 
