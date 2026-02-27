@@ -1,6 +1,6 @@
 # Configuration Parameters
 
-All installation parameters are managed centrally in `config.sh`. Source this file at the start of each installer script to make the parameters available as environment variables.
+All installation parameters are managed centrally in `config.sh`.
 
 Configurable parameters:
 
