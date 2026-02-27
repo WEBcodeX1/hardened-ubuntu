@@ -145,7 +145,7 @@ The installation process consists of three main scripts that must be executed in
 
 ## 4.2. Configure System Parameters
 
-**IMPORTANT:** Before running any installer scripts, you must configure your system-specific parameters in `config.sh`.
+**IMPORTANT:** Before running any installer scripts, you must configure your system-specific parameters in `/hardening/config.sh` on the installation media. For a full description of all available parameters, see [CONFIG.md](CONFIG.md).
 
 Edit the configuration file with your environment settings:
 
@@ -324,6 +324,9 @@ For automated deployments, you can integrate the hardening scripts into a USB in
 The repository includes a template autoinstall configuration at `/autoinstall/autoinstall.yaml`. This file can be customized and integrated into an Ubuntu 25.10 installation ISO.
 
 ### 5.1.1. Configuration File Structure
+
+> [!NOTE]
+> The following excerpt is a simplified example and does **not** contain installation commands. The full configuration used in the installation process can be found in [`/autoinstall/autoinstall.yaml`](autoinstall/autoinstall.yaml). For detailed documentation, see [`/autoinstall/README.md`](autoinstall/README.md).
 
 ```yaml
 autoinstall:
