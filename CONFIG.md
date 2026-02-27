@@ -50,8 +50,6 @@ The WPA2 passphrase for the WiFi network.
 
 Used by `setup-netplan.sh` to populate the `[NET_WIFI_AUTH_PASS]` placeholder in the WiFi netplan template. The backslash character (`\`) is automatically escaped before substitution.
 
-> **Warning:** Do not commit real credentials to version control. Use a local configuration file excluded from the repository, or set this value via environment variable.
-
 ---
 
 ## NET_NTP_STATIC_SERVER
