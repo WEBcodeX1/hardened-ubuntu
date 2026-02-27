@@ -42,8 +42,6 @@ The SSID (network name) of the WiFi network to connect to.
 
 Used by `setup-netplan.sh` to populate the `[NET_WIFI_AUTH_SSID]` placeholder in the WiFi netplan template.
 
-> **Warning:** Do not commit real credentials to version control. Use a local configuration file excluded from the repository, or set this value via environment variable.
-
 ---
 
 ## NET_WIFI_AUTH_PASS
