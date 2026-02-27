@@ -40,6 +40,9 @@ pref("network.http.http2.enabled", false, locked);
 // Disable HTTP3
 pref("network.http.http3.enable", false, locked);
 
+// Disable captive portal service
+pref("network.captive-portal-service.enabled", false, locked);
+
 // Disable Clibboard Events
 pref("dom.event.clipboardevents.enabled", false, locked);
 pref("clipboard.autocopy", false, locked);
@@ -168,3 +171,6 @@ pref("network.proxy.type", 0, locked);
 
 // Disable Autoplay
 pref("media.autoplay.default", 5, locked);
+
+// Disable setting remote preferences
+pref("remote.prefs.recommended", false, locked);
