@@ -325,6 +325,9 @@ The repository includes a template autoinstall configuration at `/autoinstall/au
 
 ### 5.1.1. Configuration File Structure
 
+> [!NOTE]
+> The following excerpt is a simplified example and does **not** contain installation commands. The full configuration used in the installation process can be found in [`/autoinstall/autoinstall.yaml`](autoinstall/autoinstall.yaml). For detailed documentation, see [`/autoinstall/README.md`](autoinstall/README.md).
+
 ```yaml
 autoinstall:
   version: 1
