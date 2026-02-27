@@ -15,6 +15,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Special character escaping for WiFi passphrase in `setup-netplan.sh`
 - `wifi-networkmanager-dns.conf`: NetworkManager DNS configuration forcing all DNS queries through dnscrypt-proxy
 - `renderer: NetworkManager` set at WiFi interface level in `03-net-wifi-config.yaml`
+- `wifi-networkmanager-p2p.conf`: NetworkManager configuration to disable WiFi P2P (Wi-Fi Direct) device
+- `ccm` and `cmac` kernel modules added to `/etc/modules-load.d/wifi.conf` for loading at boot, required for WiFi authentication
+
+#### NTP / Chrony Configuration
+- `chrony.conf`: New NTP client configuration file with static server support, command channel bound to IPv4 localhost only, leap second processing disabled
+- `NET_NTP_STATIC_SERVER` configuration parameter in `config.sh` for specifying the static NTP server IP address
+- `chrony` package installed during `installer-step2.sh` via `apt-preinstall-cmds.sh`
+- Chrony configuration applied conditionally only when `NET_NTP_STATIC_SERVER` is set in `config.sh`
+
+#### GRUB / Kernel Configuration
+- `GRUB_KERNEL_CMDLINE` configuration parameter in `config.sh` for customizable kernel command line parameters
+- `set-grub-kernel-cmdline.sh` updated to apply kernel command line from `GRUB_KERNEL_CMDLINE` config variable
+
+#### Automated Installation
+- `autoinstall/autoinstall.yaml` updated with multi-user support (`admin` and `user1` accounts in `user-data`)
+- `late-commands` added to copy hardening scripts to `/target/opt/hardening/` and remove `gnome-initial-setup`
+- `runcmd` added to execute `installer-step1.sh` automatically after first boot
+- `gnome-initial-setup` package removed via `late-commands` during unattended installation
+
+#### Network Configuration
+- `netplan-dns-override-part.yaml`: New YAML fragment providing `dhcp4-overrides: use-dns: no` and `nameservers: addresses: [127.0.0.1]`, appended to the ethernet netplan configuration at the end of `installer-step2.sh`
+
+#### Documentation
+- `CONFIG.md`: New documentation file describing all configuration parameters found in `config.sh` in detail, with one subsection per parameter including example values
 
 #### User Service Management
 - `prepare-user-autostart.sh`: New script handling XDG autostart configuration (split from `disable-user-services.sh`)
@@ -27,24 +51,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Network Hardening
 - DHCPv6 explicitly disabled (`dhcp6: no`) in ethernet netplan template
-- `dhcp4-overrides: use-dns: no` added to ethernet netplan template to prevent DHCP DNS override
-- Nameserver forced to `127.0.0.1` (dnscrypt-proxy) in ethernet netplan template
 - YAML `version: 2` field moved to correct position in netplan templates
 
 #### Application Security
 - Disabled WebAssembly (WASM) in Firefox (`javascript.options.wasm`, `devtools.debugger.features.wasm`)
+- Disabled WebRTC media navigator in Firefox (`media.navigator.enabled`) to prevent camera/microphone enumeration and IP leakage
+- Disabled captive portal service in Firefox (`network.captive-portal-service.enabled`) to prevent automatic connections to untrusted network endpoints
+- Firefox `remote.prefs.recommended` disabled to prevent remote servers from overriding local configuration
 
 ### Changed
 
 #### Service Management
 - `disable-user-services.sh` refactored: XDG autostart logic moved to new `prepare-user-autostart.sh`; now focused on masking systemd user-level services
 - Sleep, suspend, and hibernation masked at both system level (`disable-services.sh`) and user level (`disable-user-services.sh`)
+- `systemd-hibernate-clear.service` and `systemd-hibernate-resume.service` additionally masked at both system and user level for complete hibernation prevention
 - Systemd user-level snap and GNOME settings daemon services masked in `disable-user-services.sh`
 - `disable-services.sh` now runs `prepare-user-autostart.sh` and `disable-user-services.sh` separately per user
+- USBGuard GNOME desktop integration enabled via `gsettings` in user sessions (`usb-protection`, `usb-protection-level`)
+- `user-disable-services.desktop` Exec line updated to use absolute user-specific path with `[USER_ID]` placeholder, replaced at installation time
+
+#### Network Hardening
+- DNS DHCP override (`dhcp4-overrides: use-dns: no`) and local nameserver configuration moved from `02-net-if-config.yaml` to `netplan-dns-override-part.yaml`, appended to the ethernet netplan at the end of `installer-step2.sh` to ensure dnscrypt-proxy is available before the configuration is applied
+- NetworkManager DNS configuration file `/etc/NetworkManager/conf.d/90-dns.conf` permissions set to `root:root 600`
+- NetworkManager P2P configuration file `/etc/NetworkManager/conf.d/91-wifi-p2p.conf` permissions set to `root:root 600`
+
+#### Application Security
+- All Firefox preferences in `firefox-global.js` locked to prevent user override: all `pref()` calls updated to use the `locked` flag
+- Firefox global configuration file `firefox-global.js` permissions set to `644` in `install-non-snapd-firefox.sh`
 
 #### Configuration
 - `config.sh` supports multiple space-separated user IDs in `USER_IDS`
+- `GRUB_KERNEL_CMDLINE` added to `config.sh` for customizable kernel command line parameters
+- `NET_NTP_STATIC_SERVER` added to `config.sh` for static NTP server IP address
 - Improved variable quoting throughout `config.sh`
+
+#### Installer
+- `installer-step1.sh`: `systemctl daemon-reload` added at end to apply systemd configuration changes
+- `installer-step2.sh`: appends `netplan-dns-override-part.yaml` to ethernet netplan configuration to ensure DNS DHCP override is applied after dnscrypt-proxy installation
 
 ## v0.1
 
