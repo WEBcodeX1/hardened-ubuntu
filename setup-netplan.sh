@@ -30,13 +30,12 @@ sed -i "s/\[NET_IF_MTU\]/${netplan_if_mtu}/g" ${netplan_dir}/${net_config_eth}
 
 # copy wifi interface template
 if [ -n "${netplan_wifi_if_name}" ]; then
+
     net_config_wifi="03-net-wifi-config.yaml"
     cp ./${net_config_wifi} ${netplan_dir}/
 
     # escape special chars in wifi passphrase
     netplan_wifi_auth_pass=$(echo ${netplan_wifi_auth_pass} | sed 's/\\/\\\\\\\\\\\\\\\\\\/g')
-    netplan_wifi_auth_pass=$(echo ${netplan_wifi_auth_pass} | sed 's/\//\\\//g')
-    netplan_wifi_auth_pass=$(echo ${netplan_wifi_auth_pass} | sed 's/\&/\\\&/g')
 
     # replace env vars
     sed -i "s/\[NET_WIFI_IF_NAME\]/${netplan_wifi_if_name}/g" ${netplan_dir}/${net_config_wifi}
@@ -53,6 +52,12 @@ if [ -n "${netplan_wifi_if_name}" ]; then
     sed -i "s/\[NET_WIFI_IF_NAME\]/${netplan_wifi_if_name}/g" /etc/NetworkManager/conf.d/91-wifi-p2p.conf
     chown root:root /etc/NetworkManager/conf.d/91-wifi-p2p.conf
     chmod 600 /etc/NetworkManager/conf.d/91-wifi-p2p.conf
+
+    # enable ccm, cmac kernel module loading on boot
+    touch /etc/modules-load.d/wifi.conf
+    echo "ccm" > /etc/modules-load.d/wifi.conf
+    echo "cmac" >> /etc/modules-load.d/wifi.conf
+
 fi
 
 # set permissions
