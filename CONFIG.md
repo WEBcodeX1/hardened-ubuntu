@@ -10,11 +10,6 @@ The kernel network interface name of the primary ethernet adapter.
 
 Used by `setup-netplan.sh` to configure the netplan ethernet interface template (`02-net-if-config.yaml`).
 
-**Example:**
-```sh
-export NET_IF_NAME="enp2s0"
-```
-
 ---
 
 ## NET_IF_MACADDRESS
@@ -22,11 +17,6 @@ export NET_IF_NAME="enp2s0"
 The MAC address of the primary ethernet adapter.
 
 Used by `setup-netplan.sh` to bind the netplan ethernet interface to a specific physical adapter via the `match.macaddress` field, ensuring consistent interface assignment across reboots.
-
-**Example:**
-```sh
-export NET_IF_MACADDRESS="12:34:56:78:9a:9b"
-```
 
 ---
 
@@ -36,11 +26,6 @@ The Maximum Transmission Unit (MTU) in bytes for the primary ethernet interface.
 
 Used by `setup-netplan.sh` to set the `mtu` field in the netplan ethernet interface template. Set to `1500` for standard Ethernet or a higher value (e.g. `9000`) when jumbo frames are supported by the network.
 
-**Example:**
-```sh
-export NET_IF_MTU="9000"
-```
-
 ---
 
 ## NET_WIFI_IF_NAME
@@ -48,11 +33,6 @@ export NET_IF_MTU="9000"
 The kernel network interface name of the WiFi adapter.
 
 When set, `setup-netplan.sh` deploys the WiFi netplan template (`03-net-wifi-config.yaml`), the NetworkManager DNS configuration, and the NetworkManager P2P disable configuration, and enables the `ccm`/`cmac` kernel modules required for WPA2 authentication. When left empty, all WiFi configuration steps are skipped.
-
-**Example:**
-```sh
-export NET_WIFI_IF_NAME="wlp0s20f3"
-```
 
 ---
 
@@ -64,11 +44,6 @@ Used by `setup-netplan.sh` to populate the `[NET_WIFI_AUTH_SSID]` placeholder in
 
 > **Warning:** Do not commit real credentials to version control. Use a local configuration file excluded from the repository, or set this value via environment variable.
 
-**Example:**
-```sh
-export NET_WIFI_AUTH_SSID="Wifi-SSID"
-```
-
 ---
 
 ## NET_WIFI_AUTH_PASS
@@ -79,11 +54,6 @@ Used by `setup-netplan.sh` to populate the `[NET_WIFI_AUTH_PASS]` placeholder in
 
 > **Warning:** Do not commit real credentials to version control. Use a local configuration file excluded from the repository, or set this value via environment variable.
 
-**Example:**
-```sh
-export NET_WIFI_AUTH_PASS="Wifi-Password"
-```
-
 ---
 
 ## NET_NTP_STATIC_SERVER
@@ -91,11 +61,6 @@ export NET_WIFI_AUTH_PASS="Wifi-Password"
 The IP address of the static NTP server used by `chrony`.
 
 Used when deploying `chrony.conf` to replace the `[NET_NTP_STATIC_SERVER]` placeholder. This should typically be a local network NTP server such as a router or dedicated time server.
-
-**Example:**
-```sh
-export NET_NTP_STATIC_SERVER="192.168.1.1"
-```
 
 ---
 
@@ -105,11 +70,6 @@ Additional kernel command-line parameters appended to the GRUB `GRUB_CMDLINE_LIN
 
 Used by `set-grub-kernel-cmdline.sh`. The value is appended after the default `quiet splash ipv6.disable=1` parameters. Typical use cases include IOMMU configuration, power management tuning, or graphics driver options.
 
-**Example:**
-```sh
-export GRUB_KERNEL_CMDLINE="intel_iommu=igfx_off iommu.strict=1 i915.enable_dc=0 i915.modeset=1 i915.enable_psr=0 intel_idle.max_cstate=1"
-```
-
 ---
 
 ## NEXTDNS_ID
@@ -117,11 +77,6 @@ export GRUB_KERNEL_CMDLINE="intel_iommu=igfx_off iommu.strict=1 i915.enable_dc=0
 The NextDNS account identifier.
 
 Used by `apt-preinstall-cmds.sh` to configure `dnscrypt-proxy` with the correct NextDNS resolver. The value replaces the `[NEXTDNS_ID]` placeholder in `dnscrypt-proxy.toml`, forming both the server name (`NextDNS-<ID>`) and the static resolver entry. Obtain this ID from your [NextDNS account](https://my.nextdns.io/).
-
-**Example:**
-```sh
-export NEXTDNS_ID="a1b2c3"
-```
 
 ---
 
@@ -131,11 +86,6 @@ The SDNS stamp (Base64-encoded DNS-over-HTTPS URL) for the NextDNS resolver.
 
 Used by `apt-preinstall-cmds.sh` to configure `dnscrypt-proxy` by replacing the `[NEXTDNS_STAMP]` placeholder in `dnscrypt-proxy.toml`. SDNS stamps encode the full resolver URL and associated metadata in a compact format. Generate the stamp for your NextDNS configuration at [dnscrypt.info/stamps](https://dnscrypt.info/stamps) or obtain it from the NextDNS dashboard.
 
-**Example:**
-```sh
-export NEXTDNS_STAMP="sdns://AgcAAAAAAAAA..."
-```
-
 ---
 
 ## KERNEL_DOMAIN_NAME
@@ -144,11 +94,6 @@ The domain name assigned to the kernel via the `kernel.domainname` sysctl parame
 
 Used by `set-sysctl.sh` when deploying `sysctl-10-domainname.conf`, replacing the `[KERNEL_DOMAIN_NAME]` placeholder. Set this to the DNS domain of the local network or organisation.
 
-**Example:**
-```sh
-export KERNEL_DOMAIN_NAME="domain.name"
-```
-
 ---
 
 ## USER_IDS
@@ -156,8 +101,3 @@ export KERNEL_DOMAIN_NAME="domain.name"
 A space-separated list of local user account names that exist on the system.
 
 Used by `disable-services.sh` to iterate over each user and perform per-user setup steps: creating `~/autoinstall-scripts/`, setting up `~/.config/autostart/`, disabling the GNOME initial setup screen, copying autostart scripts, and running `prepare-user-autostart.sh` and `disable-user-services.sh` for each user. All listed users must already exist in the system (i.e. be defined in `autoinstall.yaml`).
-
-**Example:**
-```sh
-export USER_IDS="admin user1"
-```
