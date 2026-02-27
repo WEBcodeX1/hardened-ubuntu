@@ -157,6 +157,9 @@ The NextDNS account identifier.
 
 Used by `apt-preinstall-cmds.sh` to configure `dnscrypt-proxy` with the correct NextDNS resolver. The value replaces the `[NEXTDNS_ID]` placeholder in `dnscrypt-proxy.toml`, forming both the server name (`NextDNS-<ID>`) and the static resolver entry. Obtain this ID from your [NextDNS account](https://my.nextdns.io/).
 
+> [!NOTE]
+> The value must be the bare identifier **without** the `NextDNS-` prefix (e.g. `a1b2c3`, not `NextDNS-a1b2c3`).
+
 **Example:**
 
 ```sh
@@ -171,10 +174,13 @@ The SDNS stamp (Base64-encoded DNS-over-HTTPS URL) for the NextDNS resolver.
 
 Used by `apt-preinstall-cmds.sh` to configure `dnscrypt-proxy` by replacing the `[NEXTDNS_STAMP]` placeholder in `dnscrypt-proxy.toml`. SDNS stamps encode the full resolver URL and associated metadata in a compact format. Generate the stamp for your NextDNS configuration at [dnscrypt.info/stamps](https://dnscrypt.info/stamps) or obtain it from the NextDNS dashboard.
 
+> [!NOTE]
+> The value must be the bare Base64 string **without** the `sdns://` prefix (e.g. `AgEAAAAA...`, not `sdns://AgEAAAAA...`).
+
 **Example:**
 
 ```sh
-NEXTDNS_STAMP="sdns://AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8EL2RucwA"
+NEXTDNS_STAMP="AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8EL2RucwA"
 ```
 
 ---
@@ -195,9 +201,12 @@ KERNEL_DOMAIN_NAME="home.lan"
 
 ## USER_IDS
 
-A space-separated list of local user account names that exist on the system.
+A space-separated list of users the installer will process hardening for, performing per-user setup steps.
 
-Used by `disable-services.sh` to iterate over each user and perform per-user setup steps: creating `~/autoinstall-scripts/`, setting up `~/.config/autostart/`, disabling the GNOME initial setup screen, copying autostart scripts, and running `prepare-user-autostart.sh` and `disable-user-services.sh` for each user. All listed users must already exist in the system (i.e. be defined in `autoinstall.yaml`).
+Used by `disable-services.sh` to iterate over each user and perform per-user setup steps: creating `~/autoinstall-scripts/`, setting up `~/.config/autostart/`, disabling the GNOME initial setup screen, copying autostart scripts, and running `prepare-user-autostart.sh` and `disable-user-services.sh` for each user.
+
+> [!NOTE]
+> All listed users must also be defined in `autoinstall.yaml`. If a user is listed here but not defined there, the installation will not complete 100% successfully.
 
 **Example:**
 
