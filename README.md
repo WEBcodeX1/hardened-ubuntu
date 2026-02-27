@@ -145,7 +145,7 @@ The installation process consists of three main scripts that must be executed in
 
 ## 4.2. Configure System Parameters
 
-**IMPORTANT:** Before running any installer scripts, you must configure your system-specific parameters in `config.sh`. For a full description of all available parameters, see [CONFIG.md](CONFIG.md).
+**IMPORTANT:** Before running any installer scripts, you must configure your system-specific parameters in `/hardening/config.sh` on the installation media. For a full description of all available parameters, see [CONFIG.md](CONFIG.md).
 
 Edit the configuration file with your environment settings:
 
