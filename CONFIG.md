@@ -180,7 +180,7 @@ Used by `apt-preinstall-cmds.sh` to configure `dnscrypt-proxy` by replacing the 
 **Example:**
 
 ```sh
-NEXTDNS_STAMP="AgEAAAAAAAAAAAAOZG5zLm5leHRkbnMuaW8EL2RucwA"
+NEXTDNS_STAMP="AgEAAAAAAAAAAAAOXT3tUa78hXEabwTucO2OW1TucwX"
 ```
 
 ---
