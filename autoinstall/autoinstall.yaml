@@ -7,13 +7,28 @@ autoinstall:
     variant: ""
     toggle: null
   identity:
-    realname: 'User Name'
-    username: userid
+    realname: 'Sysadmin User'
+    username: admin
     password: '$y$j9T$u2.Sxog5EGXbH1sqVnrVD.$Qi76Enig/FpDS92jEhxsa6fLSZh4KwOMSEqfr8TH8L.'
-    hostname: ubuntu
+    hostname: system-hostname
   storage:
     layout:
       name: direct
   kernel-crash-dumps:
     enabled: false
+  user-data:
+    users:
+      - name: user1
+        gecos: 'User Name'
+        passwd: '$y$j9T$u2.Sxog5EGXbH1sqVnrVD.$Qi76Enig/FpDS92jEhxsa6fLSZh4KwOMSEqfr8TH8L.'
+        shell: /bin/sh
+        groups: users
+        lock_passwd: false
+    runcmd:
+      - cd /opt/hardening && chmod u+x *.sh && ./installer-step1.sh
+      - touch /opt/hardening/installer-step1.done
+  late-commands:
+    - mkdir -p /target/opt/hardening
+    - cp -r /cdrom/hardening/* /target/opt/hardening/
+    - apt-get remove -qy gnome-initial-setup
   shutdown: poweroff

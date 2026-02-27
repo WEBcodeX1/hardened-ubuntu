@@ -43,6 +43,12 @@ systemctl mask ubuntu-advantage-desktop-daemon.service
 systemctl mask sys-kernel-debug.mount
 systemctl mask sys-kernel-tracing.mount
 
+# mask sleep, suspend and hibernation
+systemctl mask systemd-hibernate-clear.service
+systemctl mask systemd-hibernate-resume.service
+systemctl mask systemd-suspend-then-hibernate.service
+systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
+
 # mask user snapd services
 systemctl mask --user snap.prompting-client.daemon.service
 systemctl mask --user snap.snapd-desktop-integration.snapd-desktop-integration.service
@@ -65,9 +71,37 @@ rm /var/lib/snapd/desktop/applications/*
 
 # process user based disable scripts
 for user_id in ${sys_users}; do
+
+    # process autoinstall scripts
     mkdir -p /home/${user_id}/autoinstall-scripts
     chown ${user_id}:${user_id} /home/${user_id}/autoinstall-scripts
-    cp -Ra ./disable-user-services.sh ./user-autostart.tpl /home/${user_id}/autoinstall-scripts/
+
+    # make user config dir(s) if not exist
+    mkdir -p /home/${user_id}/.config/autostart
+    chown ${user_id}:${user_id} /home/${user_id}/.config
+    chown ${user_id}:${user_id} /home/${user_id}/.config/autostart
+
+    # disable gnome initial welcome screen
+    touch /home/${user_id}/.config/gnome-initial-setup-done
+    chown ${user_id}:${user_id} /home/${user_id}/.config/gnome-initial-setup-done
+
+    # copy user based scripts / templates
+    cp -Ra ./prepare-user-autostart.sh ./disable-user-services.sh ./user-autostart.tpl /home/${user_id}/autoinstall-scripts/
     chown ${user_id}:${user_id} /home/${user_id}/autoinstall-scripts/*
-    su -c "~/autoinstall-scripts/disable-user-services.sh" - ${user_id}
+
+    # process (copy, set user_id) user disable services desktop file
+    cp -Ra ./user-disable-services.desktop /home/${user_id}/.config/autostart/
+    chown ${user_id}:${user_id} /home/${user_id}/.config/autostart/user-disable-services.desktop
+    chmod 644 /home/${user_id}/.config/autostart/user-disable-services.desktop
+    sed -i "s/\[USER_ID\]/${user_id}/g" /home/${user_id}/.config/autostart/user-disable-services.desktop
+
+    # prepare user autostart
+    su -c "~/autoinstall-scripts/prepare-user-autostart.sh" - ${user_id}
+
+    # run disable user services (without active user session)
+    su -c "./disable-user-services.sh" - ${user_id}
+
+    # run disable user services (again as root)
+    ./disable-user-services.sh
+
 done

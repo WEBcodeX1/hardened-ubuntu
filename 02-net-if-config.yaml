@@ -1,4 +1,5 @@
 network:
+  version: 2
   ethernets:
     [NET_IF_NAME]:
       match:
@@ -6,4 +7,4 @@ network:
       set-name: [NET_IF_NAME]
       mtu: [NET_IF_MTU]
       dhcp4: yes
-  version: 2
+      dhcp6: no

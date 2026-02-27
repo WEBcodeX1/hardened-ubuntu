@@ -7,6 +7,10 @@ apt-get upgrade -y
 # get env vars
 nextdns_id=`printenv NEXTDNS_ID`
 nextdns_stamp=`printenv NEXTDNS_STAMP`
+chrony_ntp_server_ip=`printenv NET_NTP_STATIC_SERVER`
+
+# install chronyd (NTP client)
+apt-get install -qy chrony
 
 # install usbguard
 apt-get install -qy usbguard
@@ -33,6 +37,17 @@ systemctl mask dnscrypt-proxy-resolvconf.service
 # replace env vars
 sed -i "s/\[NEXTDNS_ID\]/${nextdns_id}/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
 sed -i "s/\[NEXTDNS_STAMP\]/${nextdns_stamp}/g" /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+
+# set static chrony config
+if [ -n "${chrony_ntp_server_ip}" ]; then
+    cp ./chrony.conf /etc/chrony/
+    chmod 644 /etc/chrony/chrony.conf
+    sed -i "s/\[NET_NTP_STATIC_SERVER\]/${chrony_ntp_server_ip}/g" /etc/chrony/chrony.conf
+fi
+
+# restart chronyd
+systemctl restart chrony.service
+systemctl restart chronyd.service
 
 # restart dnscrypt-proxy
 systemctl restart dnscrypt-proxy
