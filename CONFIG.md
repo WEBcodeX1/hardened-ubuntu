@@ -2,6 +2,21 @@
 
 All installation parameters are managed centrally in `config.sh`. Source this file at the start of each installer script to make the parameters available as environment variables.
 
+Configurable parameters:
+
+- [NET_IF_NAME](#net_if_name)
+- [NET_IF_MACADDRESS](#net_if_macaddress)
+- [NET_IF_MTU](#net_if_mtu)
+- [NET_WIFI_IF_NAME](#net_wifi_if_name)
+- [NET_WIFI_AUTH_SSID](#net_wifi_auth_ssid)
+- [NET_WIFI_AUTH_PASS](#net_wifi_auth_pass)
+- [NET_NTP_STATIC_SERVER](#net_ntp_static_server)
+- [GRUB_KERNEL_CMDLINE](#grub_kernel_cmdline)
+- [NEXTDNS_ID](#nextdns_id)
+- [NEXTDNS_STAMP](#nextdns_stamp)
+- [KERNEL_DOMAIN_NAME](#kernel_domain_name)
+- [USER_IDS](#user_ids)
+
 ---
 
 ## NET_IF_NAME
