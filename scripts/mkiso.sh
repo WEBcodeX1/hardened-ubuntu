@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# copy eltorito image for hybrid iso (non-efi part)
+mkdir -p /boot/grub/i386-pc
+cp -Ra /usr/lib/grub/i386-pc/eltorito.img /boot/grub/i386-pc/eltorito.img
+
 # extract Ubuntu ISO
 mkdir -p /tmp/ubuntu-iso /tmp/ubuntu-custom
 mount -o loop iso/ubuntu-25.10-desktop-amd64.iso /tmp/ubuntu-iso
@@ -36,5 +40,5 @@ xorriso \
   -e '--interval:appended_partition_2_start_2781704s_size_10256d:all::' \
   -no-emul-boot \
   -boot-load-size 10256 \
-  -o /tmp/ubuntu-25.10-hardened.iso \
+  -o iso/ubuntu-25.10-hardened.iso \
   /tmp/ubuntu-custom/
