@@ -405,7 +405,7 @@ sudo apt-get install xorriso
 sudo xorriso \
   -as mkisofs \
   -V "Ubuntu 25.10 Hardened" \
-  --modification-date="$(shell date -u +"%Y%m%d%H%M%S00")" \
+  --modification-date="$(date -u +"%Y%m%d%H%M%S00")" \
   --grub2-mbr --interval:local_fs:0s-15s:zero_mbrpt,zero_gpt:'ubuntu-25.10-desktop-amd64.iso' \
   --protective-msdos-label \
   -partition_cyl_align off \
