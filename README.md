@@ -378,6 +378,9 @@ sudo apt-get install whois
 mkpasswd -m yescrypt
 ```
 
+> [!NOTE]
+> The password used in the default `autoinstall.yaml` config for both users `admin` and `user1` is: **password**.
+
 ## 5.2. Creating Bootable USB Installation Medium
 
 1. **Download Ubuntu 25.10 Desktop ISO** from the official Ubuntu website.
