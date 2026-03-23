@@ -11,7 +11,7 @@ apt-get install xorriso grub-pc-bin
 ## Run ISO Generation Script
 
 ```bash
-cd ../ && sudo ./scripts/mkiso.sh
+cd ./iso && sudo ../scripts/mkiso.sh
 ```
 
 > [!NOTE]
