@@ -1,6 +1,6 @@
 # Instructions
 
-On a *Ubuntu 25.10* installation, do the following:
+On a *Ubuntu 26.04 LTS* installation, do the following:
 
 ## Dependencies
 

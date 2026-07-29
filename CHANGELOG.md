@@ -5,7 +5,18 @@ All notable changes to the Hardened Ubuntu project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v0.3
+## v0.4
+
+### Changed
+
+#### Ubuntu 26.04 LTS Migration
+
+- Migrated entire project from Ubuntu 25.10 to Ubuntu 26.04 LTS.
+- Updated `scripts/mkiso.sh`: ISO source/output filenames updated to `ubuntu-26.04-desktop-amd64.iso` / `ubuntu-26.04-hardened.iso`; volume label updated to `Ubuntu 26.04 Hardened`; added inline comment documenting how to re-derive EFI partition offsets (`fdisk -l`) for a different ISO build.
+- Updated `scripts/README.md`: host OS requirement updated to Ubuntu 26.04 LTS.
+- Updated `iso/README.md`: download filename updated to `ubuntu-26.04-desktop-amd64.iso`.
+- Updated `README.md`: all Ubuntu 25.10 version strings, section headings, ISO filenames, and download URLs updated to Ubuntu 26.04 LTS.
+
 
 ### Added
 

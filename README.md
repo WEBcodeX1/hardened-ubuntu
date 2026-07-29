@@ -6,18 +6,18 @@ Historically, building Linux systems from source (such as Hardened Linux From Sc
 
 Experience has demonstrated that while established Linux distributions like Ubuntu offer numerous advantages, they also present significant security concerns and default configurations unsuitable for production environments without proper hardening.
 
-This repository addresses these shortcomings by providing a comprehensive hardening solution for Ubuntu 25.10 workstation systems, enabling production-ready deployment within minutes.
+This repository addresses these shortcomings by providing a comprehensive hardening solution for Ubuntu 26.04 LTS workstation systems, enabling production-ready deployment within minutes.
 
 **Additional Resources:**
 - For detailed information about Hardened Ubuntu and NextDNS security configuration, see: [Hardened Ubuntu NextDNS Security Guide](https://www.der-it-pruefer.de/security/Hardened-Ubuntu-NextDNS-Security)
-- Download autointall-ready ISO at [https://download.webcodex.de/iso/ubuntu-25.10-hardened.iso](https://download.webcodex.de/iso/ubuntu-25.10-hardened.iso)
+- Download autointall-ready ISO at [https://download.webcodex.de/iso/ubuntu-26.04-hardened.iso](https://download.webcodex.de/iso/ubuntu-26.04-hardened.iso)
 
 ## Table of Contents
 
 - [1. Abstract](#1-abstract)
-  - [1.1. Ubuntu 25.10 Key Features](#11-ubuntu-2510-key-features)
-  - [1.2. Security Concerns in Default Ubuntu 25.10](#12-security-concerns-in-default-ubuntu-2510)
-- [2. Hardened Ubuntu 25.10 (Desktop)](#2-hardened-ubuntu-2510-desktop)
+  - [1.1. Ubuntu 26.04 LTS Key Features](#11-ubuntu-2604-lts-key-features)
+  - [1.2. Security Concerns in Default Ubuntu 26.04 LTS](#12-security-concerns-in-default-ubuntu-2604-lts)
+- [2. Hardened Ubuntu 26.04 LTS (Desktop)](#2-hardened-ubuntu-2604-lts-desktop)
   - [2.1. Security Features](#21-security-features)
   - [2.2. Preserved Components](#22-preserved-components)
   - [2.3. Prerequisites](#23-prerequisites)
@@ -40,16 +40,16 @@ This repository addresses these shortcomings by providing a comprehensive harden
   - [5.3. Post-Installation Hardening](#53-post-installation-hardening)
   - [5.4. Fully Automated Installation with Late Commands](#54-fully-automated-installation-with-late-commands)
 
-## 1.1. Ubuntu 25.10 Key Features
+## 1.1. Ubuntu 26.04 LTS Key Features
 
 - XServer-less, 100% Wayland architecture (GNOME 49)
 - Enhanced service dependency management and customization (systemd)
 - Significantly improved YAML-based auto-installation
 - Hardware-based hard drive encryption using TPM 2.0+ (experimental)
 
-## 1.2. Security Concerns in Default Ubuntu 25.10
+## 1.2. Security Concerns in Default Ubuntu 26.04 LTS
 
-Ubuntu 25.10 ships with several security-relevant features enabled by default that provide insufficient administrative control:
+Ubuntu 26.04 LTS ships with several security-relevant features enabled by default that provide insufficient administrative control:
 
 - Fully automated unattended upgrades
 - Automated UEFI firmware updates
@@ -62,9 +62,9 @@ Ubuntu 25.10 ships with several security-relevant features enabled by default th
 > [!WARNING]
 > Automated update processes combined with DNS poisoning attacks present severe security risks.
 
-# 2. Hardened Ubuntu 25.10 (Desktop)
+# 2. Hardened Ubuntu 26.04 LTS (Desktop)
 
-This repository provides comprehensive hardening configurations for default Ubuntu 25.10 Desktop installations, specifically designed for software development and workstation environments.
+This repository provides comprehensive hardening configurations for default Ubuntu 26.04 LTS Desktop installations, specifically designed for software development and workstation environments.
 
 The solution aims to achieve an optimal balance between usability and security.
 
@@ -96,10 +96,10 @@ The solution aims to achieve an optimal balance between usability and security.
 
 ## 2.3. Prerequisites
 
-- Ubuntu 25.10 Desktop ISO image
+- Ubuntu 26.04 LTS Desktop ISO image
 - USB bootable installer (UNetbootin or Rufus)
 - GPT-only mode enabled in Rufus for UEFI/Secure Boot configurations
-- Optional: EFI partition encryption (Ubuntu 25.10 supports TPM 2.0)
+- Optional: EFI partition encryption (Ubuntu 26.04 LTS supports TPM 2.0)
 - Local DHCP configuration with NTP option (DHCP option 42)
 
 # 3. Secure DNS Configuration with NextDNS
@@ -127,7 +127,7 @@ To establish secure DNS infrastructure and prevent DNS-based attacks:
 
 # 4. Installation Instructions
 
-This section provides step-by-step instructions for installing and configuring the hardened Ubuntu 25.10 system.
+This section provides step-by-step instructions for installing and configuring the hardened Ubuntu 26.04 LTS system.
 
 ## 4.1. Overview
 
@@ -306,7 +306,7 @@ sudo ./installer-step3.sh
 > **A system reboot is required after completing step 3** to apply all user-level service and
 > autostart configuration changes.
 
-After completing all steps, your Ubuntu 25.10 system is hardened and ready for use. The system includes:
+After completing all steps, your Ubuntu 26.04 LTS system is hardened and ready for use. The system includes:
 
 - Encrypted DNS traffic via DNS-over-HTTPS
 - Enhanced security configurations
@@ -321,7 +321,7 @@ For automated deployments, you can integrate the hardening scripts into a USB in
 
 ## 5.1. Autoinstall Configuration
 
-The repository includes a template autoinstall configuration at `/autoinstall/autoinstall.yaml`. This file can be customized and integrated into an Ubuntu 25.10 installation ISO.
+The repository includes a template autoinstall configuration at `/autoinstall/autoinstall.yaml`. This file can be customized and integrated into an Ubuntu 26.04 LTS installation ISO.
 
 ### 5.1.1. Configuration File Structure
 
@@ -383,14 +383,14 @@ mkpasswd -m yescrypt
 
 ## 5.2. Creating Bootable USB Installation Medium
 
-1. **Download Ubuntu 25.10 Desktop ISO** from the official Ubuntu website.
+1. **Download Ubuntu 26.04 LTS Desktop ISO** from the official Ubuntu website.
 
 2. **Create the autoinstall ISO** by adding your customized autoinstall.yaml:
 
 ```bash
 # extract Ubuntu ISO
 mkdir -p /tmp/ubuntu-iso /tmp/ubuntu-custom
-sudo mount -o loop ubuntu-25.10-desktop-amd64.iso /tmp/ubuntu-iso
+sudo mount -o loop ubuntu-26.04-desktop-amd64.iso /tmp/ubuntu-iso
 cp -rT /tmp/ubuntu-iso /tmp/ubuntu-custom
 
 # add autoinstall configuration
@@ -407,14 +407,14 @@ sudo apt-get install xorriso
 # create custom (hybrid) ISO
 sudo xorriso \
   -as mkisofs \
-  -V "Ubuntu 25.10 Hardened" \
+  -V "Ubuntu 26.04 LTS Hardened" \
   --modification-date="$(date -u +"%Y%m%d%H%M%S00")" \
-  --grub2-mbr --interval:local_fs:0s-15s:zero_mbrpt,zero_gpt:'ubuntu-25.10-desktop-amd64.iso' \
+  --grub2-mbr --interval:local_fs:0s-15s:zero_mbrpt,zero_gpt:'ubuntu-26.04-desktop-amd64.iso' \
   --protective-msdos-label \
   -partition_cyl_align off \
   -partition_offset 16 \
   --mbr-force-bootable \
-  -append_partition 2 28732ac11ff8d211ba4b00a0c93ec93b --interval:local_fs:11126816d-11137071d::'ubuntu-25.10-desktop-amd64.iso' \
+  -append_partition 2 28732ac11ff8d211ba4b00a0c93ec93b --interval:local_fs:11126816d-11137071d::'ubuntu-26.04-desktop-amd64.iso' \
   -appended_part_as_gpt \
   -iso_mbr_part_type a2a0d0ebe5b9334487c068b6b72699c7 \
   -c '/boot.catalog' \
@@ -427,7 +427,7 @@ sudo xorriso \
   -e '--interval:appended_partition_2_start_2781704s_size_10256d:all::' \
   -no-emul-boot \
   -boot-load-size 10256 \
-  -o /tmp/ubuntu-25.10-hardened.iso \
+  -o /tmp/ubuntu-26.04-hardened.iso \
   /tmp/ubuntu-custom/
 ```
 
@@ -446,7 +446,7 @@ sudo xorriso \
 lsblk
 
 # write the iso to usb (replace sdx with your usb device)
-sudo dd if=/tmp/ubuntu-25.10-hardened.iso of=/dev/sdX bs=4M status=progress oflag=sync
+sudo dd if=/tmp/ubuntu-26.04-hardened.iso of=/dev/sdX bs=4M status=progress oflag=sync
 ```
 
 ## 5.3. Post-Installation Hardening
