@@ -29,7 +29,7 @@ sed -i "7r ../autoinstall/grub-autoinstall-entry.cfg" /tmp/ubuntu-custom/boot/gr
 # and update the sector/block ranges accordingly.
 xorriso \
   -as mkisofs \
-  -V "Ubuntu 26.04 Hardened" \
+  -V "Ubuntu 26.04 LTS Hardened" \
   --modification-date="$(date -u +"%Y%m%d%H%M%S00")" \
   --grub2-mbr --interval:local_fs:0s-15s:zero_mbrpt,zero_gpt:'ubuntu-26.04-desktop-amd64.iso' \
   --protective-msdos-label \
