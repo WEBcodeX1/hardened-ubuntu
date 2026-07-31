@@ -406,10 +406,24 @@ cp *.sh *.conf *.toml *.yaml *.js /tmp/ubuntu-custom/hardening/
 # install xorriso
 sudo apt-get install xorriso
 
-# derive EFI partition offsets from the ISO
-EFI_START_D=$(fdisk -l "${ISO_FILE}" | awk '/[[:space:]]ef[[:space:]]/{print $2}')
-EFI_END_D=$(fdisk -l "${ISO_FILE}" | awk '/[[:space:]]ef[[:space:]]/{print $3}')
-EFI_SIZE_D=$(fdisk -l "${ISO_FILE}" | awk '/[[:space:]]ef[[:space:]]/{print $4}')
+# derive EFI partition offsets directly from the ISO's MBR partition table
+EFI_PARAMS=$(python3 -c '
+import struct, sys
+with open(sys.argv[1], "rb") as f:
+    f.seek(446)
+    for _ in range(4):
+        entry = f.read(16)
+        if entry[4] == 0xEF:
+            start = struct.unpack_from("<I", entry, 8)[0]
+            size  = struct.unpack_from("<I", entry, 12)[0]
+            print(start, size)
+            sys.exit(0)
+print("EFI partition not found in MBR", file=sys.stderr)
+sys.exit(1)
+' "${ISO_FILE}")
+EFI_START_D=$(echo "${EFI_PARAMS}" | cut -d' ' -f1)
+EFI_SIZE_D=$(echo "${EFI_PARAMS}" | cut -d' ' -f2)
+EFI_END_D=$(( EFI_START_D + EFI_SIZE_D - 1 ))
 EFI_START_S=$(( EFI_START_D / 4 ))
 
 # create custom (hybrid) ISO

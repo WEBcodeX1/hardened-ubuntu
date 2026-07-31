@@ -22,14 +22,29 @@ cp ../*.sh ../*.conf ../*.toml ../*.yaml ../*.js /tmp/ubuntu-custom/hardening/
 # add grub autoinstall entry
 sed -i "7r ../autoinstall/grub-autoinstall-entry.cfg" /tmp/ubuntu-custom/boot/grub/grub.cfg
 
-# Derive EFI partition offsets from the source ISO at runtime.
-# fdisk reports 512-byte sector values:
-#   EFI_START_D / EFI_END_D  -> xorriso --interval:local_fs 'd' suffix (512-byte sectors)
-#   EFI_SIZE_D               -> xorriso -boot-load-size and size_Xd (512-byte sectors)
-#   EFI_START_S              -> xorriso appended_partition_2_start 's' suffix (2048-byte ISO blocks = sector / 4)
-EFI_START_D=$(fdisk -l "${ISO_FILE}" | awk '/[[:space:]]ef[[:space:]]/{print $2}')
-EFI_END_D=$(fdisk -l "${ISO_FILE}" | awk '/[[:space:]]ef[[:space:]]/{print $3}')
-EFI_SIZE_D=$(fdisk -l "${ISO_FILE}" | awk '/[[:space:]]ef[[:space:]]/{print $4}')
+# Read EFI partition offsets directly from the ISO's MBR partition table.
+# The MBR partition table starts at byte offset 446; each of the 4 entries is 16 bytes.
+# Partition type 0xEF = EFI System.  Values are in 512-byte disk sectors (LBA).
+# EFI_START_D / EFI_END_D  -> xorriso --interval:local_fs 'd' (512-byte disk sector) suffix
+# EFI_SIZE_D               -> xorriso -boot-load-size and size_Xd (512-byte disk sectors)
+# EFI_START_S              -> xorriso appended_partition_2_start 's' (2048-byte ISO sector) suffix
+EFI_PARAMS=$(python3 -c '
+import struct, sys
+with open(sys.argv[1], "rb") as f:
+    f.seek(446)
+    for _ in range(4):
+        entry = f.read(16)
+        if entry[4] == 0xEF:
+            start = struct.unpack_from("<I", entry, 8)[0]
+            size  = struct.unpack_from("<I", entry, 12)[0]
+            print(start, size)
+            sys.exit(0)
+print("EFI partition not found in MBR", file=sys.stderr)
+sys.exit(1)
+' "${ISO_FILE}")
+EFI_START_D=$(echo "${EFI_PARAMS}" | cut -d' ' -f1)
+EFI_SIZE_D=$(echo "${EFI_PARAMS}" | cut -d' ' -f2)
+EFI_END_D=$(( EFI_START_D + EFI_SIZE_D - 1 ))
 EFI_START_S=$(( EFI_START_D / 4 ))
 
 # create custom (hybrid) ISO
