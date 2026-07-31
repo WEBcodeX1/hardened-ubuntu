@@ -22,31 +22,51 @@ fail() { echo "FAIL: $*"; FAIL=$(( FAIL + 1 )); }
 echo "=== test_mkiso: EFI partition parameter extraction ==="
 
 # ---------------------------------------------------------------------------
-# Test 1: get_efi_params.py returns correct values for a known EFI entry
+# Test 1: MBR layout — get_efi_params.py returns correct values (type 0xEF)
 # ---------------------------------------------------------------------------
-TEST_ISO=$(mktemp /tmp/test_iso.XXXXXX)
+TEST_ISO=$(mktemp /tmp/test_iso_mbr.XXXXXX)
 
 EXPECTED_START=2781704
 EXPECTED_SIZE=10256
-python3 "${CREATE_TEST_ISO}" "${TEST_ISO}" "${EXPECTED_START}" "${EXPECTED_SIZE}"
+python3 "${CREATE_TEST_ISO}" "${TEST_ISO}" mbr "${EXPECTED_START}" "${EXPECTED_SIZE}"
 
 RESULT=$(python3 "${GET_EFI_PARAMS}" "${TEST_ISO}")
 EFI_START=$(echo "${RESULT}" | cut -d' ' -f1)
 EFI_SIZE=$(echo  "${RESULT}" | cut -d' ' -f2)
 
 if [ "${EFI_START}" = "${EXPECTED_START}" ] && [ "${EFI_SIZE}" = "${EXPECTED_SIZE}" ]; then
-    ok "EFI start=${EFI_START} size=${EFI_SIZE} match expected values"
+    ok "MBR: start=${EFI_START} size=${EFI_SIZE} match expected values"
 else
-    fail "expected start=${EXPECTED_START} size=${EXPECTED_SIZE}, got start=${EFI_START} size=${EFI_SIZE}"
+    fail "MBR: expected start=${EXPECTED_START} size=${EXPECTED_SIZE}, got start=${EFI_START} size=${EFI_SIZE}"
 fi
 
 rm -f "${TEST_ISO}"
 
 # ---------------------------------------------------------------------------
-# Test 2: get_efi_params.py exits non-zero when no EFI partition is present
+# Test 2: GPT layout — get_efi_params.py returns correct values (Ubuntu 26.04+)
+# ---------------------------------------------------------------------------
+TEST_ISO=$(mktemp /tmp/test_iso_gpt.XXXXXX)
+
+GPT_START=100000
+GPT_SIZE=10256
+python3 "${CREATE_TEST_ISO}" "${TEST_ISO}" gpt "${GPT_START}" "${GPT_SIZE}"
+
+RESULT=$(python3 "${GET_EFI_PARAMS}" "${TEST_ISO}")
+EFI_START=$(echo "${RESULT}" | cut -d' ' -f1)
+EFI_SIZE=$(echo  "${RESULT}" | cut -d' ' -f2)
+
+if [ "${EFI_START}" = "${GPT_START}" ] && [ "${EFI_SIZE}" = "${GPT_SIZE}" ]; then
+    ok "GPT: start=${EFI_START} size=${EFI_SIZE} match expected values"
+else
+    fail "GPT: expected start=${GPT_START} size=${GPT_SIZE}, got start=${EFI_START} size=${EFI_SIZE}"
+fi
+
+rm -f "${TEST_ISO}"
+
+# ---------------------------------------------------------------------------
+# Test 3: get_efi_params.py exits non-zero when no EFI partition is present
 # ---------------------------------------------------------------------------
 TEST_ISO=$(mktemp /tmp/test_iso_no_efi.XXXXXX)
-# Create a valid-looking 512-byte MBR with no partition entries set
 python3 - "${TEST_ISO}" <<'PYEOF'
 import sys
 buf = bytearray(512)
@@ -65,7 +85,7 @@ fi
 rm -f "${TEST_ISO}"
 
 # ---------------------------------------------------------------------------
-# Test 3: get_efi_params.py exits non-zero for a missing file
+# Test 4: get_efi_params.py exits non-zero for a missing file
 # ---------------------------------------------------------------------------
 if python3 "${GET_EFI_PARAMS}" /tmp/nonexistent_file_xyz.iso 2>/dev/null; then
     fail "expected non-zero exit for a missing ISO file"
@@ -74,7 +94,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Test 4: xorriso parameter arithmetic is consistent (matches mkiso.sh logic)
+# Test 5: xorriso parameter arithmetic is consistent (matches mkiso.sh logic)
 # ---------------------------------------------------------------------------
 EFI_START_D=2781704
 EFI_SIZE_D=10256
@@ -97,10 +117,10 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# Test 5: get_efi_params.py script is executable and shebang is correct
+# Test 6: get_efi_params.py script exists
 # ---------------------------------------------------------------------------
 if [ -f "${GET_EFI_PARAMS}" ]; then
-    ok "get_efi_params.py exists"
+    ok "get_efi_params.py exists at ${GET_EFI_PARAMS}"
 else
     fail "get_efi_params.py not found at ${GET_EFI_PARAMS}"
 fi
