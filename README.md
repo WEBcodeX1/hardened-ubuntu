@@ -403,8 +403,8 @@ cp autoinstall/autoinstall.yaml /tmp/ubuntu-custom/
 mkdir -p /tmp/ubuntu-custom/hardening
 cp *.sh *.conf *.toml *.yaml *.js /tmp/ubuntu-custom/hardening/
 
-# install xorriso
-sudo apt-get install xorriso
+# install xorriso and grub-pc-bin (required for eltorito.img hybrid ISO support)
+sudo apt-get install xorriso grub-pc-bin
 
 # derive EFI partition offsets directly from the ISO's MBR partition table
 EFI_PARAMS=$(python3 -c '
