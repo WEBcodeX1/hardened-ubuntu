@@ -171,7 +171,7 @@ export NET_WIFI_AUTH_PASS="Wifi-Password"    # WiFi passphrase
 export NET_NTP_STATIC_SERVER="192.168.1.1"   # static NTP server IP
 
 # grub kernel command line options (optional)
-export GRUB_KERNEL_CMDLINE="i915.enable_dc=0 i915.enable_psr=0 intel_idle.max_cstate=1 nomodeset"
+export GRUB_KERNEL_CMDLINE="i915.enable_dc=0 i915.enable_psr=0 intel_idle.max_cstate=1"
 
 # NextDNS configuration
 export NEXTDNS_ID="a1b2c3"                   # NextDNS configuration ID
@@ -251,7 +251,7 @@ After rebooting, the second installer script must be executed. This script **req
 **Execute the script:**
 
 ```bash
-cd hardened-ubuntu
+cd /opt/hardening/
 sudo ./installer-step2.sh
 ```
 
