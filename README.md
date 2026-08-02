@@ -401,7 +401,7 @@ cp autoinstall/autoinstall.yaml /tmp/ubuntu-custom/
 
 # copy hardening scripts to ISO
 mkdir -p /tmp/ubuntu-custom/hardening
-cp *.sh *.conf *.toml *.yaml *.js /tmp/ubuntu-custom/hardening/
+cp *.sh *.conf *.toml *.yaml *.js *.service *.tpl *.desktop hosts debconf-selections.txt /tmp/ubuntu-custom/hardening/
 
 # install xorriso and grub-pc-bin (required for eltorito.img hybrid ISO support)
 sudo apt-get install xorriso grub-pc-bin

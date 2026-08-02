@@ -17,7 +17,7 @@ cp ../autoinstall/autoinstall.yaml /tmp/ubuntu-custom/
 
 # copy hardening scripts to ISO
 mkdir -p /tmp/ubuntu-custom/hardening
-cp ../*.sh ../*.conf ../*.toml ../*.yaml ../*.js /tmp/ubuntu-custom/hardening/
+cp ../*.sh ../*.conf ../*.toml ../*.yaml ../*.js ../*.service ../*.tpl ../*.desktop ../hosts ../debconf-selections.txt /tmp/ubuntu-custom/hardening/
 
 # add grub autoinstall entry
 sed -i "7r ../autoinstall/grub-autoinstall-entry.cfg" /tmp/ubuntu-custom/boot/grub/grub.cfg
