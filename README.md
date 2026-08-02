@@ -171,7 +171,7 @@ export NET_WIFI_AUTH_PASS="Wifi-Password"    # WiFi passphrase
 export NET_NTP_STATIC_SERVER="192.168.1.1"   # static NTP server IP
 
 # grub kernel command line options (optional)
-export GRUB_KERNEL_CMDLINE="i915.enable_dc=0 i915.modeset=1 i915.enable_psr=0 intel_idle.max_cstate=1"
+export GRUB_KERNEL_CMDLINE="i915.enable_dc=0 i915.enable_psr=0 intel_idle.max_cstate=1 nomodeset"
 
 # NextDNS configuration
 export NEXTDNS_ID="a1b2c3"                   # NextDNS configuration ID
@@ -181,7 +181,7 @@ export NEXTDNS_STAMP="Base64Hash"            # SDNS stamp
 export KERNEL_DOMAIN_NAME="domain.name"      # kernel domain name
 
 # system users (must exist in autoinstall.yaml, space-separated)
-export USER_IDS="admin user1"
+export USER_IDS="administrator user1"
 ```
 
 **To find your network interface name:**
