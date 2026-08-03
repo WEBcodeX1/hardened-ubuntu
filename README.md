@@ -157,6 +157,9 @@ vim config.sh
 Configure the following parameters:
 
 ```bash
+# repository mirror
+export MIRROR_ADDRESS="https://archive.ubuntu.com/ubuntu"
+
 # network interface configuration
 export NET_IF_NAME="enp2s0"                  # NIC name
 export NET_IF_MACADDRESS="12:34:56:78:9a:9b" # interface MAC
