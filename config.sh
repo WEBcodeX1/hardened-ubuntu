@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# repository mirror
+export MIRROR_ADDRESS="http://archive.ubuntu.com/ubuntu"
+
 # netplan ethernet
 export NET_IF_NAME="enp2s0"
 export NET_IF_MACADDRESS="12:34:56:78:9a:9b"

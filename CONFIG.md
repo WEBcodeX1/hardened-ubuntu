@@ -16,6 +16,7 @@ Configurable parameters:
 - [NEXTDNS_STAMP](#nextdns_stamp)
 - [KERNEL_DOMAIN_NAME](#kernel_domain_name)
 - [USER_IDS](#user_ids)
+- [MIRROR_ADDRESS](#mirror_address)
 
 ---
 
@@ -212,4 +213,21 @@ Used by `disable-services.sh` to iterate over each user and perform per-user set
 
 ```sh
 USER_IDS="admin user1"
+```
+
+---
+
+## MIRROR_ADDRESS
+
+The apt repository mirror URL used to replace the default `archive.ubuntu.com` address.
+
+Used by `patch-ubuntu-mirrors-https.sh` after converting the sources file to HTTPS. If set to a value other than the default, the `archive.ubuntu.com` URL is replaced with the specified mirror across `/etc/apt/sources.list.d/ubuntu.sources`. This is useful when a regional or local mirror offers faster or more reliable package downloads.
+
+> [!NOTE]
+> The value must be a full URL including the scheme and path (e.g. `https://mirror.example.com/ubuntu`). Set to `http://archive.ubuntu.com/ubuntu` to keep the default Ubuntu archive.
+
+**Example:**
+
+```sh
+MIRROR_ADDRESS="https://mirror.example.com/ubuntu"
 ```
