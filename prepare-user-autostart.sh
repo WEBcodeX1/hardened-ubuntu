@@ -1,5 +1,7 @@
 #!/bin/sh
 
+SCRIPT_DIR="$(dirname "$0")"
+
 # make xdg autostart dir
 mkdir -p ~/.config/autostart
 
@@ -38,11 +40,11 @@ cp /tmp/update-notifier.desktop ~/.config/autostart/
 
 # disable gnome extensions
 desktop_file="$HOME/.config/autostart/disable-gnome-extension-ding.desktop"
-cp user-autostart.tpl ${desktop_file}
+cp "${SCRIPT_DIR}/user-autostart.tpl" "${desktop_file}"
 sed -i "s/\[GNOME_EXTENSION_CMD\]/gnome-extensions disable ding@rastersoft.com/g" ${desktop_file}
 sed -i "s/\[GNOME_EXTENSION_ID\]/DING/g" ${desktop_file}
 
 desktop_file="$HOME/.config/autostart/disable-gnome-extension-snapd.desktop"
-cp user-autostart.tpl ${desktop_file}
+cp "${SCRIPT_DIR}/user-autostart.tpl" "${desktop_file}"
 sed -i "s/\[GNOME_EXTENSION_CMD\]/gnome-extensions disable snapd-prompting@canonical.com/g" ${desktop_file}
 sed -i "s/\[GNOME_EXTENSION_ID\]/snapd prompting/g" ${desktop_file}

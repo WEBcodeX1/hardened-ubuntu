@@ -49,23 +49,6 @@ systemctl mask systemd-hibernate-resume.service
 systemctl mask systemd-suspend-then-hibernate.service
 systemctl mask sleep.target suspend.target hibernate.target hybrid-sleep.target suspend-then-hibernate.target
 
-# mask user snapd services
-systemctl mask --user snap.prompting-client.daemon.service
-systemctl mask --user snap.snapd-desktop-integration.snapd-desktop-integration.service
-systemctl mask --user snap.firmware-updater.firmware-notifier.service
-systemctl mask --user snapd.session-agent.service
-systemctl mask --user snapd.session-agent.socket
-
-# mask user snapd sockets
-systemctl mask --user snapd.session-agent.socket
-
-# mask user timers
-systemctl mask --user snap.firmware-updater.firmware-notifier.timer
-
-# mask user launchpad related
-systemctl mask --user launchpadlib-cache-clean.service
-systemctl mask --user launchpadlib-cache-clean.timer
-
 # remove snapd desktop apps / icons
 rm /var/lib/snapd/desktop/applications/*
 
@@ -86,8 +69,26 @@ for user_id in ${sys_users}; do
     chown ${user_id}:${user_id} /home/${user_id}/.config/gnome-initial-setup-done
 
     # copy user based scripts / templates
-    cp -Ra ./prepare-user-autostart.sh ./disable-user-services.sh ./user-autostart.tpl /home/${user_id}/autoinstall-scripts/
+    cp -Ra ./prepare-user-autostart.sh ./disable-user-services.sh ./user-autostart.tpl ./config.sh /home/${user_id}/autoinstall-scripts/
     chown ${user_id}:${user_id} /home/${user_id}/autoinstall-scripts/*
+
+    # mask user-level snap/snapd services before first login by creating /dev/null symlinks
+    # directly in ~/.config/systemd/user/ (equivalent to `systemctl --user mask`, but works
+    # without an active user session / D-Bus bus)
+    mkdir -p /home/${user_id}/.config/systemd/user/
+    for svc in \
+        snap.firmware-updater.firmware-notifier.service \
+        snap.firmware-updater.firmware-notifier.timer \
+        snap.prompting-client.daemon.service \
+        snap.snapd-desktop-integration.snapd-desktop-integration.service \
+        snapd.session-agent.service \
+        snapd.session-agent.socket \
+        launchpadlib-cache-clean.service \
+        launchpadlib-cache-clean.timer \
+        gnome-initial-setup-first-login.service; do
+        ln -sf /dev/null "/home/${user_id}/.config/systemd/user/${svc}"
+    done
+    chown -R ${user_id}:${user_id} /home/${user_id}/.config/systemd
 
     # process (copy, set user_id) user disable services desktop file
     cp -Ra ./user-disable-services.desktop /home/${user_id}/.config/autostart/
@@ -99,7 +100,7 @@ for user_id in ${sys_users}; do
     su -c "~/autoinstall-scripts/prepare-user-autostart.sh" - ${user_id}
 
     # run disable user services (without active user session)
-    su -c "./disable-user-services.sh" - ${user_id}
+    su -c "~/autoinstall-scripts/disable-user-services.sh" - ${user_id}
 
     # run disable user services (again as root)
     ./disable-user-services.sh

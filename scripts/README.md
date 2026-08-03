@@ -1,6 +1,6 @@
 # Instructions
 
-On a *Ubuntu 25.10* installation, do the following:
+On a *Ubuntu 26.04 LTS* installation, do the following:
 
 ## Dependencies
 
@@ -19,4 +19,4 @@ cd ./iso && sudo ../scripts/mkiso.sh
 > which is **not** included in a debian system, only on Ubuntu.
 
 > [!NOTE]
-> The `mkiso.sh` must be run as root (`sudo` or directly) from the parent (`../`) path.
+> The `mkiso.sh` must be run as root (`sudo` or directly) from **inside the `iso/` directory**, as shown in the command above.

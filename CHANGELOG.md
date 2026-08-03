@@ -5,15 +5,87 @@ All notable changes to the Hardened Ubuntu project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v0.3
+## v0.4
+
+- Major Ubuntu update to the long-term supported 26.04 LTS version
+- Bugs from previous versions fixed for a 100% clean installer workflow
+- GNOME initial setup reliably removed during automated installation
+- User automation / autoinstall process working 100%
+
+### Changed
+
+#### Ubuntu 26.04 LTS Migration
+
+- Migrated entire project from Ubuntu 25.10 to Ubuntu 26.04 LTS.
+- Updated `scripts/mkiso.sh`: ISO source/output filenames updated to `ubuntu-26.04-desktop-amd64.iso` / `ubuntu-26.04-hardened.iso`; volume label updated to `Ubuntu 26.04 LTS Hardened`.
+- Updated `scripts/README.md`: host OS requirement updated to Ubuntu 26.04 LTS.
+- Updated `iso/README.md`: download filename updated to `ubuntu-26.04-desktop-amd64.iso`; run directory clarified to inside the `iso/` directory.
+- Updated `README.md`: all Ubuntu 25.10 version strings, section headings, ISO filenames, and download URLs updated to Ubuntu 26.04 LTS.
+
+#### GRUB Kernel Command Line
+
+- Removed `nomodeset` parameter from default `GRUB_KERNEL_CMDLINE` in `config.sh`; `nomodeset` forces software rendering and causes incorrect display setup on systems with Intel integrated graphics.
+
+#### Repository Mirror Configuration
+
+- `MIRROR_ADDRESS` configuration parameter added to `config.sh` under the `# repository mirror` group; defaults to `https://archive.ubuntu.com/ubuntu`.
+- `patch-ubuntu-mirrors-https.sh` updated to replace the default `archive.ubuntu.com` URL with the configured `MIRROR_ADDRESS` value when set, enabling regional or local mirror selection without modifying the installer scripts.
+- Default `MIRROR_ADDRESS` set to HTTPS to enforce encrypted package download from the default Ubuntu archive.
+
+#### Installer / Autoinstall
+
+- `autoinstall/autoinstall.yaml` `late-commands`: `apt-get remove gnome-initial-setup` prefixed with `curtin in-target --` to ensure the package is removed from the installed target system (without the prefix the command ran in the throwaway live installer environment only).
+- Installation working directory path fixed from `/opt/hardened` to `/opt/hardening` in `autoinstall/autoinstall.yaml` `runcmd`.
+
+#### User Script Deployment
+
+- `config.sh` added to the per-user `~/autoinstall-scripts/` copy in `disable-services.sh` so that sourced environment variables are available in the user context.
+- `prepare-user-autostart.sh`: resolved `user-autostart.tpl` using `SCRIPT_DIR="$(dirname "$0")"` instead of a bare relative path that resolved against the current working directory, fixing template copy failures when the script is invoked via `su -c`.
+- `disable-services.sh`: fixed `su -c` invocation path for `disable-user-services.sh` from `./disable-user-services.sh` to `~/autoinstall-scripts/disable-user-services.sh`.
+
+#### Snapd and GNOME User-Level Service Deactivation
+
+- Removed incorrectly placed `systemctl --user mask` block from `disable-services.sh`; these commands ran as root without a user D-Bus session and were silently ignored.
+- Per-user snap and snapd user services now masked before first login by creating `/dev/null` symlinks directly in `~/.config/systemd/user/` inside the per-user loop (equivalent to `systemctl --user mask` but session-independent).
+- `gnome-initial-setup-first-login.service` added to the per-user `/dev/null` symlink list; in Ubuntu 24.04+ this user-level service is launched by GDM on first login independently of the `~/.config/gnome-initial-setup-done` marker file.
 
 ### Added
 
 #### ISO Generation Script
 
-- Addded ISO generation script `scripts/mkiso.sh` and documentation.
+- Added ISO generation script `scripts/mkiso.sh` and documentation.
+
+#### EFI Partition Auto-Detection
+
+- Added `scripts/get_efi_params.py`: reads EFI System Partition start and size (in 512-byte LBA sectors) directly from the ISO binary. Searches the MBR partition table first (type `0xEF`), then falls back to the GPT partition table (EFI System Partition GUID `C12A7328-F81F-11D2-BA4B-00A0C93EC93B`) to support modern Ubuntu 26.04 ISOs which use GPT.
+- `scripts/mkiso.sh` updated to call `get_efi_params.py` at runtime, replacing the previously hardcoded Ubuntu 25.10 EFI offset values (`EFI_START_D`, `EFI_END_D`, `EFI_SIZE_D`, `EFI_START_S`) with values derived directly from the source ISO.
+
+#### ISO Generation Tests
+
+- Added `tests/test_mkiso.sh`: shell test suite for `scripts/get_efi_params.py` covering correct MBR and GPT EFI parameter extraction, arithmetic consistency of derived values (`EFI_END_D`, `EFI_START_S`), error exit on missing EFI partition, and error exit on missing ISO file.
+- Added `tests/create_test_iso.py`: helper script generating minimal synthetic ISO binaries with configurable MBR or GPT partition table layouts for use as test fixtures.
+
+#### Package Removal
+
+- `gnome-initial-setup` added to `apt-remove-cmds.sh` to ensure the package is removed during first-boot hardening, providing a belt-and-suspenders removal in addition to the `late-commands` step in `autoinstall.yaml`.
+
+## v0.3
+
+- Initial ISO autogeneration support via `scripts/mkiso.sh`
+
+### Added
+
+#### ISO Generation Script
+
+- Added `scripts/mkiso.sh`: automates the creation of a bootable hybrid ISO image using `xorriso`, embedding the autoinstall configuration and hardening scripts into the Ubuntu desktop ISO.
+- Added `scripts/README.md`: documents dependencies (`xorriso`, `grub-pc-bin`) and the correct run procedure (from inside the `iso/` directory as root).
 
 ## v0.2
+
+- WiFi support added with NetworkManager integration
+- NTP / Chrony static server configuration introduced
+- Automated multi-user installation support with per-user service management
+- Firefox browser privacy and security hardening extended
 
 ### Added
 
@@ -98,6 +170,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `installer-step2.sh`: appends `netplan-dns-override-part.yaml` to ethernet netplan configuration to ensure DNS DHCP override is applied after dnscrypt-proxy installation
 
 ## v0.1
+
+- Initial release of the Hardened Ubuntu project
+- Core system hardening: DNS-over-HTTPS, IOMMU, USBGuard, sysctl, and service disabling
+- SNAP and snapd completely removed; Firefox installed as a native non-SNAP package
+- Fully automated installation via Ubuntu autoinstall with custom ISO generation
 
 ### Added
 
