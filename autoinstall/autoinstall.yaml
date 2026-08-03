@@ -30,5 +30,5 @@ autoinstall:
   late-commands:
     - mkdir -p /target/opt/hardening
     - cp -r /cdrom/hardening/* /target/opt/hardening/
-    - apt-get remove -qy gnome-initial-setup
+    - curtin in-target -- apt-get remove -qy gnome-initial-setup
   shutdown: poweroff

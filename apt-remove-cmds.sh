@@ -3,6 +3,7 @@
 # remove unwanted packages
 apt-get remove -qy avahi-daemon
 apt-get remove -qy bluez bluez-cups bluez-obexd
+apt-get remove -qy gnome-initial-setup
 apt-get remove -qy ubuntu-insights
 apt-get remove -qy ubuntu-report
 apt-get remove -qy fwupd

@@ -84,7 +84,8 @@ for user_id in ${sys_users}; do
         snapd.session-agent.service \
         snapd.session-agent.socket \
         launchpadlib-cache-clean.service \
-        launchpadlib-cache-clean.timer; do
+        launchpadlib-cache-clean.timer \
+        gnome-initial-setup-first-login.service; do
         ln -sf /dev/null "/home/${user_id}/.config/systemd/user/${svc}"
     done
     chown -R ${user_id}:${user_id} /home/${user_id}/.config/systemd
