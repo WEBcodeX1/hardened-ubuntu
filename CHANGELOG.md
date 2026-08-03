@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v0.4
 
+- Major Ubuntu update to the long-term supported 26.04 LTS version
+- Bugs from previous versions fixed for a 100% clean installer workflow
+- GNOME initial setup reliably removed during automated installation
+- User automation / autoinstall process working 100%
+
 ### Changed
 
 #### Ubuntu 26.04 LTS Migration
@@ -65,6 +70,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `gnome-initial-setup` added to `apt-remove-cmds.sh` to ensure the package is removed during first-boot hardening, providing a belt-and-suspenders removal in addition to the `late-commands` step in `autoinstall.yaml`.
 
 ## v0.2
+
+- WiFi support added with NetworkManager integration
+- NTP / Chrony static server configuration introduced
+- Automated multi-user installation support with per-user service management
+- Firefox browser privacy and security hardening extended
 
 ### Added
 
@@ -149,6 +159,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `installer-step2.sh`: appends `netplan-dns-override-part.yaml` to ethernet netplan configuration to ensure DNS DHCP override is applied after dnscrypt-proxy installation
 
 ## v0.1
+
+- Initial release of the Hardened Ubuntu project
+- Core system hardening: DNS-over-HTTPS, IOMMU, USBGuard, sysctl, and service disabling
+- SNAP and snapd completely removed; Firefox installed as a native non-SNAP package
+- Fully automated installation via Ubuntu autoinstall with custom ISO generation
 
 ### Added
 
