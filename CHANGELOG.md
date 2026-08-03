@@ -69,6 +69,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `gnome-initial-setup` added to `apt-remove-cmds.sh` to ensure the package is removed during first-boot hardening, providing a belt-and-suspenders removal in addition to the `late-commands` step in `autoinstall.yaml`.
 
+## v0.3
+
+- Initial ISO autogeneration support via `scripts/mkiso.sh`
+
+### Added
+
+#### ISO Generation Script
+
+- Added `scripts/mkiso.sh`: automates the creation of a bootable hybrid ISO image using `xorriso`, embedding the autoinstall configuration and hardening scripts into the Ubuntu desktop ISO.
+- Added `scripts/README.md`: documents dependencies (`xorriso`, `grub-pc-bin`) and the correct run procedure (from inside the `iso/` directory as root).
+
 ## v0.2
 
 - WiFi support added with NetworkManager integration
