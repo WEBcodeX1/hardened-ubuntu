@@ -1,0 +1,14 @@
+#!/sbin/openrc-run
+
+description="Custom Security Settings"
+
+depend() {
+    need net
+    after bootmisc
+}
+
+start() {
+    ebegin "Applying custom security settings"
+    /usr/local/bin/set-custom-security.sh
+    eend $?
+}

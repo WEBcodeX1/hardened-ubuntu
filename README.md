@@ -295,7 +295,7 @@ The final installer script installs additional packages and applies user-based s
 - Installs Firefox ESR from Mozilla repository (non-SNAP version)
 - Applies global hardened Firefox configuration
 - Removes SNAP desktop applications and icons
-- Enables custom systemd security service
+- Enables custom OpenRC/SysV security service
 - Disables ubuntu-fan network service
 
 **Execute the script:**

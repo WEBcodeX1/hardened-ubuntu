@@ -16,4 +16,4 @@ debconf-set-selections < debconf-selections.txt
 rm /var/lib/snapd/desktop/applications/*
 
 # set custom security (service)
-. ./enable-systemd-custom-security.sh
+. ./enable-openrc-custom-security.sh
