@@ -216,7 +216,7 @@ The first installer script performs the initial hardening configuration. This sc
 ```bash
 # clone or download the repository
 git clone https://github.com/WEBcodeX1/hardened-ubuntu.git
-cd hardened-ubuntu
+cd hardened-ubuntu/hardening
 
 # make sure config.sh is properly configured (see chapter 4.2.)
 # run the first installer script as root
@@ -301,7 +301,7 @@ The final installer script installs additional packages and applies user-based s
 **Execute the script:**
 
 ```bash
-cd hardened-ubuntu
+cd hardened-ubuntu/hardening
 sudo ./installer-step3.sh
 ```
 
@@ -404,7 +404,7 @@ cp autoinstall/autoinstall.yaml /tmp/ubuntu-custom/
 
 # copy hardening scripts to ISO
 mkdir -p /tmp/ubuntu-custom/hardening
-cp *.sh *.conf *.toml *.yaml *.js *.service *.tpl *.desktop hosts debconf-selections.txt /tmp/ubuntu-custom/hardening/
+cp hardening/* /tmp/ubuntu-custom/hardening/
 
 # install xorriso and grub-pc-bin (required for eltorito.img hybrid ISO support)
 sudo apt-get install xorriso grub-pc-bin
@@ -481,7 +481,7 @@ cd ~/hardened-ubuntu
 
 # or clone from repository
 git clone https://github.com/WEBcodeX1/hardened-ubuntu.git
-cd hardened-ubuntu
+cd hardened-ubuntu/hardening
 ```
 
 3. **Follow the manual installation steps** starting from chapter 4.2. (edit config.sh) through chapter 4.6. to apply all hardening configurations.

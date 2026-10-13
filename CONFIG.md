@@ -1,6 +1,6 @@
 # Configuration Parameters
 
-All installation parameters are managed centrally in `config.sh`.
+All installation parameters are managed centrally in `hardening/config.sh`.
 
 Configurable parameters:
 
