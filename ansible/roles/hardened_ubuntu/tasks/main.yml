@@ -1,0 +1,93 @@
+---
+# tasks file for hardened_ubuntu
+#
+# Step grouping follows the original installer-step{1,2,3}.sh scripts
+# (preserved in the repository's hardening/ sub-directory). Each step can be
+# run separately via --tags step1/step2/step3, single areas via their own tag.
+
+# ---------------------------------------------------------------------------
+# step 1 - initial system hardening (installer-step1.sh)
+# ---------------------------------------------------------------------------
+
+- name: Patch http(s) mirrors
+  ansible.builtin.import_tasks: apt_mirrors.yml
+  when: hardening_manage_apt_mirrors
+  tags: [step1, apt_mirrors]
+
+- name: Set static nextdns addresses
+  ansible.builtin.import_tasks: hosts.yml
+  when: hardening_manage_hosts
+  tags: [step1, hosts]
+
+- name: Setup netplan
+  ansible.builtin.import_tasks: netplan.yml
+  when: hardening_manage_netplan
+  tags: [step1, netplan]
+
+- name: Remove unwanted apt packages
+  ansible.builtin.import_tasks: packages_remove.yml
+  when: hardening_remove_packages
+  tags: [step1, packages_remove]
+
+- name: Disable services
+  ansible.builtin.import_tasks: services.yml
+  when: hardening_disable_services
+  tags: [step1, services]
+
+- name: Disable dbus services
+  ansible.builtin.import_tasks: dbus.yml
+  when: hardening_manage_dbus
+  tags: [step1, dbus]
+
+- name: Blacklist modules
+  ansible.builtin.import_tasks: modules_blacklist.yml
+  when: hardening_blacklist_modules
+  tags: [step1, modules_blacklist]
+
+- name: Set limits
+  ansible.builtin.import_tasks: limits.yml
+  when: hardening_manage_limits
+  tags: [step1, limits]
+
+- name: Set sysctl config
+  ansible.builtin.import_tasks: sysctl.yml
+  when: hardening_manage_sysctl
+  tags: [step1, sysctl]
+
+- name: Set grub kernel command line
+  ansible.builtin.import_tasks: grub.yml
+  when: hardening_manage_grub
+  tags: [step1, grub]
+
+# ---------------------------------------------------------------------------
+# step 2 - secure DNS / NTP / USB protection (installer-step2.sh)
+# ---------------------------------------------------------------------------
+
+- name: Install and configure secure DNS (dnscrypt-proxy / NextDNS)
+  ansible.builtin.import_tasks: dns.yml
+  when: hardening_manage_dns
+  tags: [step2, dns]
+
+# ---------------------------------------------------------------------------
+# step 3 - packages / firefox / users (installer-step3.sh)
+# ---------------------------------------------------------------------------
+
+- name: Install packages
+  ansible.builtin.import_tasks: packages_install.yml
+  when: hardening_install_packages
+  tags: [step3, packages_install]
+
+- name: Install non-snapd firefox
+  ansible.builtin.import_tasks: firefox.yml
+  when: hardening_install_firefox
+  tags: [step3, firefox]
+
+- name: Enable custom security service
+  ansible.builtin.import_tasks: custom_security.yml
+  when: hardening_custom_security
+  tags: [step3, custom_security]
+
+- name: Configure users
+  ansible.builtin.import_tasks: users.yml
+  when: hardening_manage_users
+  tags: [step3, users]

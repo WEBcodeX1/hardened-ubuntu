@@ -1,0 +1,17 @@
+{{ ansible_managed | comment }}
+network:
+  version: 2
+  ethernets:
+    {{ hardening_net_if_name }}:
+      match:
+        macaddress: {{ hardening_net_if_macaddress }}
+      set-name: {{ hardening_net_if_name }}
+      mtu: {{ hardening_net_if_mtu }}
+      dhcp4: yes
+      dhcp6: no
+{% if hardening_netplan_dns_override %}
+      dhcp4-overrides:
+        use-dns: no
+      nameservers:
+        addresses: [127.0.0.1]
+{% endif %}

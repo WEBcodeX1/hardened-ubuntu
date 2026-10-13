@@ -1,0 +1,47 @@
+---
+# disable-services.sh equivalent (system-wide part)
+
+- name: Disable unneeded systemd units
+  ansible.builtin.systemd_service:
+    name: "{{ item }}"
+    enabled: false
+  loop: "{{ hardening_services_disable }}"
+  register: hardening_disable_result
+  failed_when:
+    - hardening_disable_result is failed
+    - "'Could not find the requested service' not in (hardening_disable_result.msg | default(''))"
+
+- name: Find dynamically generated snapd units
+  ansible.builtin.find:
+    paths: /etc/systemd/system
+    patterns: "snap*"
+    file_type: any
+  register: hardening_snap_units
+
+- name: Disable dynamically generated snapd units
+  ansible.builtin.systemd_service:
+    name: "{{ item | basename }}"
+    enabled: false
+  loop: "{{ hardening_snap_units.files | map(attribute='path') | sort }}"
+  register: hardening_snap_disable_result
+  failed_when:
+    - hardening_snap_disable_result is failed
+    - "'Could not find the requested service' not in (hardening_snap_disable_result.msg | default(''))"
+
+- name: Mask unneeded systemd units, mounts and sleep targets
+  ansible.builtin.systemd_service:
+    name: "{{ item }}"
+    masked: true
+  loop: "{{ hardening_services_mask }}"
+
+- name: Find snapd desktop apps / icons
+  ansible.builtin.find:
+    paths: "{{ hardening_snapd_desktop_dir }}"
+    file_type: file
+  register: hardening_snapd_desktop_files
+
+- name: Remove snapd desktop apps / icons
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ hardening_snapd_desktop_files.files | map(attribute='path') | sort }}"

@@ -1,0 +1,87 @@
+---
+# per-user part of disable-services.sh, prepare-user-autostart.sh and
+# disable-user-services.sh equivalent
+
+- name: Create user config directories
+  ansible.builtin.file:
+    path: "/home/{{ item.0 }}/{{ item.1 }}"
+    state: directory
+    owner: "{{ item.0 }}"
+    group: "{{ item.0 }}"
+    mode: "0755"
+  loop: "{{ hardening_users | product(['.config', '.config/autostart', '.config/systemd', '.config/systemd/user']) | list }}"
+  loop_control:
+    label: "/home/{{ item.0 }}/{{ item.1 }}"
+
+- name: Disable gnome initial welcome screen
+  ansible.builtin.copy:
+    content: ""
+    dest: "/home/{{ item }}/.config/gnome-initial-setup-done"
+    force: false
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: "0644"
+  loop: "{{ hardening_users }}"
+
+- name: Mask user-level systemd units before first login
+  ansible.builtin.file:
+    src: /dev/null
+    dest: "/home/{{ item.0 }}/.config/systemd/user/{{ item.1 }}"
+    state: link
+    force: true
+    owner: "{{ item.0 }}"
+    group: "{{ item.0 }}"
+  loop: "{{ hardening_users | product(hardening_user_mask_units) | list }}"
+  loop_control:
+    label: "/home/{{ item.0 }}/.config/systemd/user/{{ item.1 }}"
+
+- name: Hide unwanted xdg autostart entries
+  ansible.builtin.copy:
+    content: |
+      [Desktop Entry]
+      Type=Application
+      Hidden=true
+    dest: "/home/{{ item.0 }}/.config/autostart/{{ item.1 }}"
+    owner: "{{ item.0 }}"
+    group: "{{ item.0 }}"
+    mode: "0644"
+  loop: "{{ hardening_users | product(hardening_user_hidden_autostarts) | list }}"
+  loop_control:
+    label: "/home/{{ item.0 }}/.config/autostart/{{ item.1 }}"
+
+- name: Disable unwanted gnome shell extensions on login
+  ansible.builtin.template:
+    src: user-autostart.desktop.j2
+    dest: "/home/{{ item.0 }}/.config/autostart/disable-gnome-extension-{{ item.1.id }}.desktop"
+    owner: "{{ item.0 }}"
+    group: "{{ item.0 }}"
+    mode: "0644"
+  loop: "{{ hardening_users | product(hardening_user_disabled_gnome_extensions) | list }}"
+  loop_control:
+    label: "/home/{{ item.0 }}/.config/autostart/disable-gnome-extension-{{ item.1.id }}.desktop"
+
+- name: Install system-wide dconf profile
+  ansible.builtin.copy:
+    content: |
+      user-db:user
+      system-db:local
+    dest: /etc/dconf/profile/user
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Update dconf database
+
+- name: Set hardened gnome defaults (usb protection, donation reminder)
+  ansible.builtin.copy:
+    content: |
+      [org/gnome/settings-daemon/plugins/housekeeping]
+      donation-reminder-enabled=false
+
+      [org/gnome/desktop/privacy]
+      usb-protection=true
+      usb-protection-level='always'
+    dest: /etc/dconf/db/local.d/00-hardened-ubuntu
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Update dconf database

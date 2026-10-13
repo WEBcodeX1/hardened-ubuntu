@@ -1,0 +1,11 @@
+---
+# modules-blacklist.sh equivalent
+
+- name: Install kernel module blacklist
+  ansible.builtin.copy:
+    src: modules-blacklist.conf
+    dest: /etc/modprobe.d/blacklist-misc.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Update initramfs

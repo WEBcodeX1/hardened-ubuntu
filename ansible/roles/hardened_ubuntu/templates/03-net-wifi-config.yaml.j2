@@ -1,0 +1,15 @@
+{{ ansible_managed | comment }}
+network:
+  version: 2
+  wifis:
+    {{ hardening_net_wifi_if_name }}:
+      renderer: NetworkManager
+      dhcp4: yes
+      dhcp6: no
+      dhcp4-overrides:
+        use-dns: no
+      nameservers:
+        addresses: [127.0.0.1]
+      access-points:
+        "{{ hardening_net_wifi_auth_ssid }}":
+          password: "{{ hardening_net_wifi_auth_pass }}"

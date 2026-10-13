@@ -1,0 +1,11 @@
+---
+# disable-dbus-services.sh equivalent
+
+- name: Disable unneeded D-Bus services (rename to .disabled)
+  ansible.builtin.command:
+    cmd: >-
+      mv {{ hardening_dbus_services_dir }}/{{ item }}.service
+      {{ hardening_dbus_services_dir }}/{{ item }}.service.disabled
+    removes: "{{ hardening_dbus_services_dir }}/{{ item }}.service"
+    creates: "{{ hardening_dbus_services_dir }}/{{ item }}.service.disabled"
+  loop: "{{ hardening_dbus_services_disable }}"

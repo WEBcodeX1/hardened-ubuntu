@@ -1,0 +1,15 @@
+---
+# patch-ubuntu-mirrors-https.sh equivalent
+
+- name: Use HTTPS for all Ubuntu package mirror URLs
+  ansible.builtin.replace:
+    path: /etc/apt/sources.list.d/ubuntu.sources
+    regexp: 'http:'
+    replace: 'https:'
+
+- name: Replace default archive URL with configured mirror
+  ansible.builtin.replace:
+    path: /etc/apt/sources.list.d/ubuntu.sources
+    regexp: 'https?://archive\.ubuntu\.com/ubuntu'
+    replace: "{{ hardening_mirror_address }}"
+  when: hardening_mirror_address | length > 0

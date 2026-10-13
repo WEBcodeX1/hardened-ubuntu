@@ -1,0 +1,40 @@
+---
+# set-sysctl.sh equivalent
+
+- name: Install static sysctl hardening configs
+  ansible.builtin.copy:
+    src: "sysctl-{{ item }}"
+    dest: "/etc/sysctl.d/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - 10-net.conf
+    - 20-misc.conf
+    - 55-kernel-hardening.conf
+    - 99-coredump.conf
+  notify:
+    - Reload sysctl
+    - Update initramfs
+
+- name: Set kernel domain name sysctl config
+  ansible.builtin.template:
+    src: sysctl-10-domainname.conf.j2
+    dest: /etc/sysctl.d/10-domainname.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify:
+    - Reload sysctl
+    - Update initramfs
+
+- name: Deactivate distribution sysctl configs
+  ansible.builtin.file:
+    src: /dev/null
+    dest: "/etc/sysctl.d/{{ item }}"
+    state: link
+    force: true
+  loop: "{{ hardening_sysctl_deactivate }}"
+  notify:
+    - Reload sysctl
+    - Update initramfs

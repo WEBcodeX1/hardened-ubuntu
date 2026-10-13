@@ -1,0 +1,28 @@
+---
+# apt-install-cmds.sh / installer-step3.sh equivalent (packages)
+
+- name: Set pbuilder debconf selections (debconf-selections.txt)
+  ansible.builtin.debconf:
+    name: pbuilder
+    question: pbuilder/mirrorsite
+    value: "{{ hardening_mirror_address }}"
+    vtype: string
+
+- name: Upgrade all packages
+  ansible.builtin.apt:
+    upgrade: full
+    update_cache: true
+
+- name: Install workstation packages
+  ansible.builtin.apt:
+    name: "{{ hardening_packages_install }}"
+    state: present
+
+- name: Disable ubuntu-fan (net) service
+  ansible.builtin.systemd_service:
+    name: ubuntu-fan.service
+    enabled: false
+  register: hardening_fan_disable_result
+  failed_when:
+    - hardening_fan_disable_result is failed
+    - "'Could not find the requested service' not in (hardening_fan_disable_result.msg | default(''))"

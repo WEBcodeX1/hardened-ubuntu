@@ -5,6 +5,21 @@ All notable changes to the Hardened Ubuntu project will be documented in this fi
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+#### Ansible / Enterprise Support
+
+- Added native Ansible role `hardened_ubuntu` (`ansible/roles/hardened_ubuntu`) following the standard Ansible directory layout (`defaults/`, `vars/`, `tasks/`, `handlers/`, `templates/`, `files/`, `meta/`).
+- All installer-step1/2/3 bash logic translated into fully native, idempotent Ansible tasks (no raw script execution): apt mirrors, hosts, netplan, package removal/installation, systemd services, D-Bus services, kernel module blacklist, limits, sysctl, grub, dnscrypt-proxy/NextDNS, chrony, usbguard, non-snap Firefox ESR, custom security service and per-user hardening.
+- All `config.sh` parameters exposed as Ansible variables in `defaults/main.yml`, plus per-feature toggles and overridable package/service lists.
+- Added `ansible/site.yml` playbook, example inventory, `ansible.cfg` and `ansible/README.md` documentation; `--check` mode (dry-run compliance audits) and step-wise execution via `step1`/`step2`/`step3` tags supported.
+
+### Changed
+
+- Moved standalone bash hardening scripts and their config/template files from the repository root into the dedicated `hardening/` sub-directory (scripts remain fully functional and callable on their own); updated `scripts/mkiso.sh`, `README.md` and `CONFIG.md` references accordingly.
+
 ## v0.4
 
 - Major Ubuntu update to the long-term supported 26.04 LTS version
