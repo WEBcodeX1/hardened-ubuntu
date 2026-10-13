@@ -1,0 +1,6 @@
+---
+# vars file for hardened_ubuntu (internal constants, do not override)
+
+hardening_netplan_dir: /etc/netplan
+hardening_dbus_services_dir: /usr/share/dbus-1/services
+hardening_snapd_desktop_dir: /var/lib/snapd/desktop/applications

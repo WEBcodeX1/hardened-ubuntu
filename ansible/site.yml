@@ -1,0 +1,18 @@
+---
+# Hardened Ubuntu 26.04 LTS workstation playbook
+#
+# Usage:
+#   ansible-playbook -i inventory/hosts site.yml
+#
+# Run a single step (mirrors the original installer-step scripts):
+#   ansible-playbook -i inventory/hosts site.yml --tags step1
+#
+# Dry-run / compliance audit:
+#   ansible-playbook -i inventory/hosts site.yml --check --diff
+
+- name: Harden Ubuntu 26.04 LTS workstations
+  hosts: hardened_workstations
+  become: true
+
+  roles:
+    - hardened_ubuntu

@@ -1,0 +1,11 @@
+---
+# apt-remove-cmds.sh equivalent
+
+- name: Remove unwanted packages
+  ansible.builtin.apt:
+    name: "{{ hardening_packages_remove }}"
+    state: absent
+
+- name: Autoremove unused packages
+  ansible.builtin.apt:
+    autoremove: true

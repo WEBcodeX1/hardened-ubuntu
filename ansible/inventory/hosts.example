@@ -1,0 +1,14 @@
+# example inventory - copy to "hosts" and adapt to your environment
+#
+# per-host hardware parameters (interface name, MAC address) can be set as
+# host variables; fleet-wide settings fit best in group variables, see
+# roles/hardened_ubuntu/defaults/main.yml for all available parameters
+
+[hardened_workstations]
+# workstation1.example.com hardening_net_if_name=enp2s0 hardening_net_if_macaddress=12:34:56:78:9a:9b
+# workstation2.example.com hardening_net_if_name=enp3s0 hardening_net_if_macaddress=12:34:56:78:9a:9c
+
+[hardened_workstations:vars]
+# hardening_nextdns_id=a1b2c3
+# hardening_nextdns_stamp=Base64Hash
+# hardening_kernel_domain_name=domain.name

@@ -1,0 +1,9 @@
+#!/bin/sh
+# {{ ansible_managed }}
+
+# disable multicast on interfaces
+ifconfig docker0 -multicast 2>/dev/null
+ifconfig {{ hardening_net_if_name }} -multicast
+
+# prevent kernel module load
+sysctl -w kernel.modules_disabled=1

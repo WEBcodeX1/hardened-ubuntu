@@ -1,0 +1,21 @@
+---
+# set-grub-kernel-cmdline.sh equivalent
+
+- name: Disable ipv6 and set kernel command line in grub
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: '^GRUB_CMDLINE_LINUX_DEFAULT='
+    line: >-
+      GRUB_CMDLINE_LINUX_DEFAULT="quiet splash ipv6.disable=1
+      {{ hardening_grub_kernel_cmdline }}"
+  notify: Update grub
+
+- name: Disable crashkernel (kdump)
+  ansible.builtin.copy:
+    content: |
+      GRUB_CMDLINE_LINUX_DEFAULT="$GRUB_CMDLINE_LINUX_DEFAULT crashkernel=no"
+    dest: /etc/default/grub.d/kdump-tools.cfg
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Update grub

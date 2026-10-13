@@ -1,0 +1,8 @@
+---
+# set-limits.sh equivalent
+
+- name: Disable core dumps in security limits
+  ansible.builtin.blockinfile:
+    path: /etc/security/limits.conf
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (hardened-ubuntu limits)"
+    block: "{{ lookup('ansible.builtin.file', 'limits.conf') }}"

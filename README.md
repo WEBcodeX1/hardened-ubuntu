@@ -39,6 +39,7 @@ This repository addresses these shortcomings by providing a comprehensive harden
   - [5.2. Creating Bootable USB Installation Medium](#52-creating-bootable-usb-installation-medium)
   - [5.3. Post-Installation Hardening](#53-post-installation-hardening)
   - [5.4. Fully Automated Installation with Late Commands](#54-fully-automated-installation-with-late-commands)
+- [6. Ansible / Enterprise Support](#6-ansible--enterprise-support)
 
 ## 1.1. Ubuntu 26.04 LTS Key Features
 
@@ -216,7 +217,7 @@ The first installer script performs the initial hardening configuration. This sc
 ```bash
 # clone or download the repository
 git clone https://github.com/WEBcodeX1/hardened-ubuntu.git
-cd hardened-ubuntu
+cd hardened-ubuntu/hardening
 
 # make sure config.sh is properly configured (see chapter 4.2.)
 # run the first installer script as root
@@ -301,7 +302,7 @@ The final installer script installs additional packages and applies user-based s
 **Execute the script:**
 
 ```bash
-cd hardened-ubuntu
+cd hardened-ubuntu/hardening
 sudo ./installer-step3.sh
 ```
 
@@ -404,7 +405,7 @@ cp autoinstall/autoinstall.yaml /tmp/ubuntu-custom/
 
 # copy hardening scripts to ISO
 mkdir -p /tmp/ubuntu-custom/hardening
-cp *.sh *.conf *.toml *.yaml *.js *.service *.tpl *.desktop hosts debconf-selections.txt /tmp/ubuntu-custom/hardening/
+cp hardening/* /tmp/ubuntu-custom/hardening/
 
 # install xorriso and grub-pc-bin (required for eltorito.img hybrid ISO support)
 sudo apt-get install xorriso grub-pc-bin
@@ -481,7 +482,7 @@ cd ~/hardened-ubuntu
 
 # or clone from repository
 git clone https://github.com/WEBcodeX1/hardened-ubuntu.git
-cd hardened-ubuntu
+cd hardened-ubuntu/hardening
 ```
 
 3. **Follow the manual installation steps** starting from chapter 4.2. (edit config.sh) through chapter 4.6. to apply all hardening configurations.
@@ -510,3 +511,34 @@ autoinstall:
 
 > [!NOTE]
 > **Important:** Due to the reboot requirement between installation steps and the need for DNS verification, it is recommended to run `installer-step2.sh` and `installer-step3.sh` manually after the initial automated installation and reboot. The hardening scripts will be available in `/opt/hardening/` on the installed system.
+
+# 6. Ansible / Enterprise Support
+
+For enterprise fleet deployments, the complete hardening configuration is also
+available as a native, idempotent **Ansible role** in the
+[`ansible/`](ansible/) directory.
+
+All logic from the standalone bash scripts (preserved in the
+[`hardening/`](hardening/) sub-directory for single-workstation usage) has been
+translated into native Ansible modules, enabling:
+
+- **Zero-touch fleet scaling** - deploy and maintain hardening states across
+  hundreds of Ubuntu nodes simultaneously
+- **Dry-run compliance audits** - `ansible-playbook --check --diff`
+- **Variable-driven configuration** - all `config.sh` parameters are exposed
+  as Ansible variables (see `ansible/roles/hardened_ubuntu/defaults/main.yml`)
+- **Staged rollouts** - the original 3-step installer workflow is mirrored via
+  the `step1` / `step2` / `step3` tags
+
+```bash
+cd ansible
+cp inventory/hosts.example inventory/hosts
+
+# dry-run compliance audit
+ansible-playbook site.yml --check --diff
+
+# apply the full hardening configuration
+ansible-playbook site.yml
+```
+
+See [ansible/README.md](ansible/README.md) for complete documentation.

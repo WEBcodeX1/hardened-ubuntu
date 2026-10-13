@@ -1,0 +1,54 @@
+---
+# apt-preinstall-cmds.sh / installer-step2.sh equivalent
+
+- name: Install secure DNS, NTP and USB protection packages
+  ansible.builtin.apt:
+    name: >-
+      {{
+        ['chrony', 'dnscrypt-proxy', 'libnss-resolve']
+        + (['usbguard'] if hardening_manage_usbguard else [])
+      }}
+    state: present
+    update_cache: true
+
+- name: Install nsswitch config (resolve via systemd-resolved)
+  ansible.builtin.copy:
+    src: nsswitch.conf
+    dest: /etc/nsswitch.conf
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Configure systemd-resolved to use local dnscrypt-proxy
+  ansible.builtin.copy:
+    src: resolved.conf
+    dest: /etc/systemd/resolved.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart systemd-resolved
+
+- name: Configure dnscrypt-proxy for NextDNS
+  ansible.builtin.template:
+    src: dnscrypt-proxy.toml.j2
+    dest: /etc/dnscrypt-proxy/dnscrypt-proxy.toml
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart dnscrypt-proxy
+
+- name: Disable and mask dnscrypt-proxy-resolvconf service
+  ansible.builtin.systemd_service:
+    name: dnscrypt-proxy-resolvconf.service
+    enabled: false
+    masked: true
+
+- name: Set static chrony config
+  ansible.builtin.template:
+    src: chrony.conf.j2
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: "0644"
+  when: hardening_manage_chrony and hardening_net_ntp_static_server | length > 0
+  notify: Restart chrony

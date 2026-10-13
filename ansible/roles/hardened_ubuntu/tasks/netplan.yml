@@ -1,0 +1,71 @@
+---
+# setup-netplan.sh equivalent
+
+- name: Remove NetworkManager and installer netplan configs
+  ansible.builtin.file:
+    path: "{{ hardening_netplan_dir }}/{{ item }}"
+    state: absent
+  loop:
+    - 01-network-manager-all.yaml
+    - 00-installer-config.yaml
+  notify: Apply netplan configuration
+
+- name: Switch global network management to networkd
+  ansible.builtin.copy:
+    src: 01-networkd-all.yaml
+    dest: "{{ hardening_netplan_dir }}/01-networkd-all.yaml"
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Apply netplan configuration
+
+- name: Configure ethernet interface
+  ansible.builtin.template:
+    src: 02-net-if-config.yaml.j2
+    dest: "{{ hardening_netplan_dir }}/02-net-if-config.yaml"
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Apply netplan configuration
+
+- name: Configure WiFi
+  when: hardening_net_wifi_if_name | length > 0
+  block:
+
+    - name: Configure WiFi interface
+      ansible.builtin.template:
+        src: 03-net-wifi-config.yaml.j2
+        dest: "{{ hardening_netplan_dir }}/03-net-wifi-config.yaml"
+        owner: root
+        group: root
+        mode: "0600"
+      no_log: true
+      notify: Apply netplan configuration
+
+    - name: Disable NetworkManager DNS management
+      ansible.builtin.copy:
+        src: wifi-networkmanager-dns.conf
+        dest: /etc/NetworkManager/conf.d/90-dns.conf
+        owner: root
+        group: root
+        mode: "0600"
+      notify: Apply netplan configuration
+
+    - name: Disable NetworkManager WiFi p2p device
+      ansible.builtin.template:
+        src: wifi-networkmanager-p2p.conf.j2
+        dest: /etc/NetworkManager/conf.d/91-wifi-p2p.conf
+        owner: root
+        group: root
+        mode: "0600"
+      notify: Apply netplan configuration
+
+    - name: Enable ccm, cmac kernel module loading on boot
+      ansible.builtin.copy:
+        content: |
+          ccm
+          cmac
+        dest: /etc/modules-load.d/wifi.conf
+        owner: root
+        group: root
+        mode: "0644"

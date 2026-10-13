@@ -1,0 +1,24 @@
+---
+# enable-systemd-custom-security.sh equivalent
+
+- name: Install custom security script
+  ansible.builtin.template:
+    src: set-custom-security.sh.j2
+    dest: /usr/local/bin/set-custom-security.sh
+    owner: root
+    group: root
+    mode: "0500"
+
+- name: Install custom security systemd service
+  ansible.builtin.copy:
+    src: custom-security.service
+    dest: /etc/systemd/system/custom-security.service
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Reload systemd daemon
+
+- name: Enable custom security service
+  ansible.builtin.systemd_service:
+    name: custom-security.service
+    enabled: true

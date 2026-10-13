@@ -1,0 +1,244 @@
+---
+# defaults file for hardened_ubuntu
+#
+# All variables mirror the parameters previously defined in
+# hardening/config.sh. See CONFIG.md in the repository root for a full
+# description of each parameter.
+
+# ---------------------------------------------------------------------------
+# Feature toggles (step 1 - offline hardening)
+# ---------------------------------------------------------------------------
+hardening_manage_apt_mirrors: true
+hardening_manage_hosts: true
+hardening_manage_netplan: true
+hardening_remove_packages: true
+hardening_disable_services: true
+hardening_manage_dbus: true
+hardening_blacklist_modules: true
+hardening_manage_limits: true
+hardening_manage_sysctl: true
+hardening_manage_grub: true
+
+# ---------------------------------------------------------------------------
+# Feature toggles (step 2 - secure DNS / NTP / USB protection)
+# ---------------------------------------------------------------------------
+hardening_manage_dns: true
+hardening_manage_chrony: true
+hardening_manage_usbguard: true
+
+# ---------------------------------------------------------------------------
+# Feature toggles (step 3 - packages / firefox / users)
+# ---------------------------------------------------------------------------
+hardening_install_packages: true
+hardening_install_firefox: true
+hardening_custom_security: true
+hardening_manage_users: true
+
+# ---------------------------------------------------------------------------
+# Repository mirror (MIRROR_ADDRESS)
+# ---------------------------------------------------------------------------
+hardening_mirror_address: "https://archive.ubuntu.com/ubuntu"
+
+# ---------------------------------------------------------------------------
+# Netplan ethernet (NET_IF_NAME / NET_IF_MACADDRESS / NET_IF_MTU)
+# ---------------------------------------------------------------------------
+hardening_net_if_name: "enp2s0"
+hardening_net_if_macaddress: "12:34:56:78:9a:9b"
+hardening_net_if_mtu: 9000
+
+# use local dnscrypt-proxy as only nameserver (netplan dhcp dns override)
+hardening_netplan_dns_override: true
+
+# ---------------------------------------------------------------------------
+# Netplan wifi (NET_WIFI_IF_NAME / NET_WIFI_AUTH_SSID / NET_WIFI_AUTH_PASS)
+# leave hardening_net_wifi_if_name empty to skip WiFi configuration
+# ---------------------------------------------------------------------------
+hardening_net_wifi_if_name: ""
+hardening_net_wifi_auth_ssid: ""
+hardening_net_wifi_auth_pass: ""
+
+# ---------------------------------------------------------------------------
+# Chronyd (NET_NTP_STATIC_SERVER) - leave empty to keep distribution default
+# ---------------------------------------------------------------------------
+hardening_net_ntp_static_server: ""
+
+# ---------------------------------------------------------------------------
+# Grub cmdline (GRUB_KERNEL_CMDLINE)
+# ---------------------------------------------------------------------------
+hardening_grub_kernel_cmdline: >-
+  intel_iommu=igfx_off iommu.strict=1 i915.enable_dc=0 i915.enable_psr=0
+  intel_idle.max_cstate=1
+
+# ---------------------------------------------------------------------------
+# NextDNS (NEXTDNS_ID / NEXTDNS_STAMP)
+# ---------------------------------------------------------------------------
+hardening_nextdns_id: "a1b2c3"
+hardening_nextdns_stamp: "Base64Hash"
+
+# ---------------------------------------------------------------------------
+# Kernel (KERNEL_DOMAIN_NAME)
+# ---------------------------------------------------------------------------
+hardening_kernel_domain_name: "domain.name"
+
+# ---------------------------------------------------------------------------
+# System users (USER_IDS) - must already exist on the target system
+# ---------------------------------------------------------------------------
+hardening_users:
+  - administrator
+  - user1
+
+# ---------------------------------------------------------------------------
+# Packages removed during step 1 (apt-remove-cmds.sh)
+# ---------------------------------------------------------------------------
+hardening_packages_remove:
+  - avahi-daemon
+  - bluez
+  - bluez-cups
+  - bluez-obexd
+  - gnome-initial-setup
+  - ubuntu-insights
+  - ubuntu-report
+  - fwupd
+  - unattended-upgrades
+  - speech-dispatcher
+  - ufw
+  - whoopsie
+  - update-notifier
+
+# ---------------------------------------------------------------------------
+# Systemd units disabled during step 1 (disable-services.sh)
+# ---------------------------------------------------------------------------
+hardening_services_disable:
+  - snapd.autoimport.service
+  - snapd.service
+  - snapd.socket
+  - snapd.apparmor.service
+  - snapd.seeded.service
+  - snapd.recovery-chooser-trigger.service
+  - snapd.system-shutdown.service
+  - snapd.core-fixup.service
+  - kdump-tools.service
+  - apport.service
+  - snapd.snap-repair.timer
+  - apt-daily-upgrade.timer
+  - update-notifier-download.timer
+  - update-notifier-motd.timer
+  - apt-daily.timer
+
+# ---------------------------------------------------------------------------
+# Systemd units masked during step 1 (disable-services.sh)
+# ---------------------------------------------------------------------------
+hardening_services_mask:
+  - bolt.service
+  - apt-daily.service
+  - fwupd.service
+  - fwupd-refresh.timer
+  - ubuntu-advantage-desktop-daemon.service
+  - sys-kernel-debug.mount
+  - sys-kernel-tracing.mount
+  - systemd-hibernate-clear.service
+  - systemd-hibernate-resume.service
+  - systemd-suspend-then-hibernate.service
+  - sleep.target
+  - suspend.target
+  - hibernate.target
+  - hybrid-sleep.target
+  - suspend-then-hibernate.target
+
+# ---------------------------------------------------------------------------
+# D-Bus services disabled during step 1 (disable-dbus-services.sh)
+# ---------------------------------------------------------------------------
+hardening_dbus_services_disable:
+  - com.feralinteractive.GameMode
+  - io.snapcraft.Launcher
+  - io.snapcraft.SessionAgent
+  - io.snapcraft.Settings
+  - org.freedesktop.portal.Tracker
+  - org.gnome.OnlineAccounts
+  - org.gnome.Shell.Screencast
+  - org.gtk.vfs.GPhoto2VolumeMonitor
+  - org.gtk.vfs.GoaVolumeMonitor
+  - org.gtk.vfs.AfcVolumeMonitor
+
+# ---------------------------------------------------------------------------
+# Distribution sysctl configs deactivated during step 1 (set-sysctl.sh)
+# ---------------------------------------------------------------------------
+hardening_sysctl_deactivate:
+  - 10-coredump-debian.conf
+  - 50-default.conf
+  - 55-network-security.conf
+  - 55-ptrace.conf
+  - 55-magic-sysrq.conf
+
+# ---------------------------------------------------------------------------
+# Packages installed during step 3 (apt-install-cmds.sh)
+# ---------------------------------------------------------------------------
+hardening_packages_install:
+  - aptitude
+  - intel-microcode
+  - vim
+  - net-tools
+  - kate
+  - xterm
+  - foot
+  - docker.io
+  - build-essential
+  - debhelper
+  - pbuilder
+  - devscripts
+  - gimp
+  - opensc
+  - vlc
+
+# ---------------------------------------------------------------------------
+# Per-user systemd units masked before first login (disable-services.sh)
+# ---------------------------------------------------------------------------
+hardening_user_mask_units:
+  - snap.firmware-updater.firmware-notifier.service
+  - snap.firmware-updater.firmware-notifier.timer
+  - snap.prompting-client.daemon.service
+  - snap.snapd-desktop-integration.snapd-desktop-integration.service
+  - snapd.session-agent.service
+  - snapd.session-agent.socket
+  - launchpadlib-cache-clean.service
+  - launchpadlib-cache-clean.timer
+  - gnome-initial-setup-first-login.service
+  - org.gnome.SettingsDaemon.MediaKeys.service
+  - org.gnome.SettingsDaemon.MediaKeys.target
+  - org.gnome.SettingsDaemon.Wwan.service
+  - org.gnome.SettingsDaemon.Wwan.target
+  - org.gnome.SettingsDaemon.Sharing.service
+  - org.gnome.SettingsDaemon.Sharing.target
+  - systemd-hibernate-clear.service
+  - systemd-hibernate-resume.service
+  - systemd-suspend-then-hibernate.service
+  - sleep.target
+  - suspend.target
+  - hibernate.target
+  - hybrid-sleep.target
+  - suspend-then-hibernate.target
+
+# ---------------------------------------------------------------------------
+# XDG autostart entries hidden per user (prepare-user-autostart.sh)
+# ---------------------------------------------------------------------------
+hardening_user_hidden_autostarts:
+  - geoclue-demo-agent.desktop
+  - im-launch.desktop
+  - orca-autostart.desktop
+  - org.gnome.Evolution-alarm-notify.desktop
+  - snap-userd-autostart.desktop
+  - spice-vdagent.desktop
+  - ubuntu-advantage-notification.desktop
+  - ubuntu-report-on-upgrade.desktop
+  - update-notifier.desktop
+
+# ---------------------------------------------------------------------------
+# GNOME shell extensions disabled per user (prepare-user-autostart.sh)
+# ---------------------------------------------------------------------------
+hardening_user_disabled_gnome_extensions:
+  - id: "ding"
+    name: "DING"
+    extension: "ding@rastersoft.com"
+  - id: "snapd"
+    name: "snapd prompting"
+    extension: "snapd-prompting@canonical.com"

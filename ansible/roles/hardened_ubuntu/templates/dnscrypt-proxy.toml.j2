@@ -1,0 +1,18 @@
+# {{ ansible_managed }}
+listen_addresses = [ '127.0.0.1:5353' ]
+
+server_names = ['NextDNS-{{ hardening_nextdns_id }}']
+block_ipv6 = true
+ipv6_servers = false
+
+[query_log]
+  file = '/var/log/dnscrypt-proxy/query.log'
+
+[nx_log]
+  file = '/var/log/dnscrypt-proxy/nx.log'
+
+[sources]
+
+[static]
+  [static.'NextDNS-{{ hardening_nextdns_id }}']
+  stamp = 'sdns://{{ hardening_nextdns_stamp }}'

@@ -1,0 +1,63 @@
+---
+# install-non-snapd-firefox.sh equivalent
+
+- name: Create apt keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Download Mozilla apt repository signing key
+  ansible.builtin.get_url:
+    url: https://packages.mozilla.org/apt/repo-signing-key.gpg
+    dest: /etc/apt/keyrings/packages.mozilla.org.asc
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Add Mozilla apt repository
+  ansible.builtin.deb822_repository:
+    name: mozilla
+    types: deb
+    uris: https://packages.mozilla.org/apt
+    suites: mozilla
+    components: main
+    signed_by: /etc/apt/keyrings/packages.mozilla.org.asc
+    state: present
+
+- name: Pin Mozilla origin over Ubuntu firefox packages
+  ansible.builtin.copy:
+    content: |
+      Package: *
+      Pin: origin packages.mozilla.org
+      Pin-Priority: 1000
+
+      Package: firefox*
+      Pin: release o=Ubuntu
+      Pin-Priority: -1
+    dest: /etc/apt/preferences.d/mozilla
+    owner: root
+    group: root
+    mode: "0644"
+
+- name: Remove Ubuntu firefox packages
+  ansible.builtin.apt:
+    name:
+      - firefox
+    state: absent
+
+- name: Install Mozilla firefox-esr
+  ansible.builtin.apt:
+    name: firefox-esr
+    state: present
+    update_cache: true
+
+- name: Install hardened global firefox preferences
+  ansible.builtin.copy:
+    src: firefox-global.js
+    dest: /usr/lib/firefox-esr/defaults/pref/firefox-global.js
+    owner: root
+    group: root
+    mode: "0644"
